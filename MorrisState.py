@@ -13,9 +13,9 @@
 
 from search import *
 
-class SokobanState(StateSpace):
+class MorrisState(StateSpace):
 
-    def __init__(self, action, gval, parent, width, height, robots, boxes, storage, obstacles):
+    def __init__(self, action, gval, parent, token_locations):
         '''
         Creates a new Sokoban state.
         @param width: The room's X dimension (excluding walls).
@@ -26,13 +26,9 @@ class SokobanState(StateSpace):
         @param obstacles: A frozenset of all the impassable obstacles.
         '''
         StateSpace.__init__(self, action, gval, parent)
-        self.width = width
-        self.height = height
-        self.robots = robots
-        self.boxes = boxes
-        self.storage = storage
-        self.obstacles = obstacles    
+        self.token_locations = token_locations    
 
+    #TODO
     def successors(self):
         '''
         Generates all the actions that can be performed from this state, and the states those actions will create.        
@@ -90,45 +86,31 @@ class SokobanState(StateSpace):
 
     def hashable_state(self):
         '''Return a data item that can be used as a dictionary key to UNIQUELY represent a state.'''
-        return hash((self.robots, self.boxes))       
+        return hash((self.token_locations))       
 
     def state_string(self):
-        '''Returns a string representation fo a state that can be printed to stdout.'''        
-        map = []
-        for y in range(0, self.height):
-            row = []
-            for x in range(0, self.width):
-                row += [' ']
-            map += [row]
-        
-        for storage_point in self.storage:
-            map[storage_point[1]][storage_point[0]] = '.'
-        for obstacle in self.obstacles:
-            map[obstacle[1]][obstacle[0]] = '#'
-        for i, robot in enumerate(self.robots):
-            if robot in self.storage:
-                map[robot[1]][robot[0]] = chr(ord('A') + i)
-            else:
-                map[robot[1]][robot[0]] = chr(ord('a') + i)
-        for box in self.boxes:
-            if box in self.storage:
-                map[box[1]][box[0]] = '*'
-            else:
-                map[box[1]][box[0]] = '$'
-        
-        for y in range(0, self.height):
-            map[y] = ['#'] + map[y]
-            map[y] = map[y] + ['#']
-        map = ['#' * (self.width + 2)] + map
-        map = map + ['#' * (self.width + 2)]
+        '''Returns a string representation fo a state that can be printed to stdout.
 
-        s = ''
-        for row in map:
-            for char in row:
-                s += char
-            s += '\n'
+        E.g. [['-', '0', '1'],
+              ['0', '1', '0'],
+              ['0', '0', '-']]
 
-        return s        
+              -  0  1 
+              0  1  0 
+              0  0  -
+
+        ''' 
+
+        state_str = ''
+        for i in range(3):
+            for j in range(3):
+                if self.token_locations[i][j] == '-':
+                    state_str += ' - '
+                else:
+                    state_str += ' ' + self.token_locations[i][j] + ' '
+            state_str += "\n" # print new line
+
+        return state_str        
 
     def print_state(self):
         '''
@@ -138,14 +120,12 @@ class SokobanState(StateSpace):
         print(self.state_string())
 
 
-def sokoban_goal_state(state):
+#TODO
+def morris_goal_state(state):
   '''Returns True if we have reached a goal state'''
   '''INPUT: a sokoban state'''
   '''OUTPUT: True (if goal) or False (if not)'''  
-  for box in state.boxes:
-    if box not in state.storage:
-      return False
-  return True
+  
 
 '''
 Sokoban Problem Set, for testing
