@@ -33,11 +33,23 @@ class MorrisState(StateSpace):
 
     #TODO
     def successors(self):
-        pass
+
+        successors = []
+
+        if self.stage1:
+            for i in range(len(self.token_locations)):
+                for j in range(len(self.token_locations)):
+                    if self.token_locations[i][j] == '-':
+                        arr_copy = [x[:] for x in self.token_locations]
+                        arr_copy[i][j] = '2'
+                        print(arr_copy)
+                        successors.append(MorrisState("START", 0, None, arr_copy, True, False, False))
+        return successors
+
 
     def hashable_state(self):
         '''Return a data item that can be used as a dictionary key to UNIQUELY represent a state.'''
-        return hash((self.token_locations))       
+        return hash(tuple(map(tuple,self.token_locations)))      
 
     def state_string(self):
         '''Returns a string representation fo a state that can be printed to stdout.
@@ -74,9 +86,14 @@ class MorrisState(StateSpace):
 #TODO
 def morris_goal_state(state):
   '''Returns True if we have reached a goal state'''
-  '''INPUT: a sokoban state'''
+  '''INPUT: a morris state'''
   '''OUTPUT: True (if goal) or False (if not)'''  
-  pass
-
+  if state.stage1:
+    count = 0
+    for i in range(len(state.token_locations)):
+        for j in range(len(state.token_locations)):
+            if state.token_locations[i][j] == '-':
+                count += 1
+    return count == 0
 
   

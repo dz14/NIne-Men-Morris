@@ -9,10 +9,9 @@ def moves_stage1(gameboard):
 				available_moves.append((i, j))
 	return available_moves
 
+#TODO
 def moves_stage2(gameboard):
 	return [(0,1), (1, 2), (1, 0), (1, 2)]
-
-
 
 def moves_stage3(gameboard):
 	available_moves = []
@@ -42,7 +41,7 @@ if __name__ == "__main__":
 	stage3 = False
 
 	gameboard = [['-' for x in range(game_x)] for y in range(game_y)]
-	game_state = MorrisState("Start", None, None, gameboard, True, False, False)
+	game_state = MorrisState("START", None, None, gameboard, True, False, False)
 
 	while not finished:
 
@@ -65,13 +64,15 @@ if __name__ == "__main__":
 
 				gameboard[move_x][move_y] = '1'
 
-				game_state = MorrisState("Start", None, None, gameboard, True, False, False)
+				game_state = MorrisState("Start", 0, None, gameboard, True, False, False)
 				p1_turn = False
 
 			else:
 				#Use the current state to generate the next best move
 				p1_turn = True
-				pass
+				se = SearchEngine()
+				final = se.search(initState=game_state, goal_fn=morris_goal_state)
+				print(final.state_string())
 
 		elif stage2:
 
