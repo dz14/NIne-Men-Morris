@@ -119,5 +119,5 @@ def count_pieces_ingame(gameboard):
 
 def count_pieces_to_put(pieces_in_game, current_player):
     '''calculate how many pieces the current player still needs to set on the board'''
-    number_of_pieces = 9 - self.pieces_in_game[self.current_player-1]
+    number_of_pieces = 9 - pieces_in_game[self.current_player-1]
     return number_of_pieces
