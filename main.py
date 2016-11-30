@@ -41,7 +41,7 @@ if __name__ == "__main__":
 	stage3 = False
 
 	gameboard = [['-' for x in range(game_x)] for y in range(game_y)]
-	game_state = MorrisState("START", None, None, gameboard, True, False, False)
+	game_state = MorrisState("START", None, None, gameboard, 1, 1)
 
 	while not finished:
 
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
 				gameboard[move_x][move_y] = '1'
 
-				game_state = MorrisState("Start", 0, None, gameboard, True, False, False)
+				game_state = MorrisState("Start", 0, None, gameboard, 1, 2)
 				p1_turn = False
 
 			else:
@@ -72,7 +72,7 @@ if __name__ == "__main__":
 				p1_turn = True
 				se = SearchEngine()
 				final = se.search(initState=game_state, goal_fn=morris_goal_state)
-				print(final.state_string())
+				print(final)
 
 		elif stage2:
 
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
 				gameboard[move_x][move_y] = '1'
 
-				game_state = MorrisState("Start", None, None, gameboard, True, False, False)
+				game_state = MorrisState("Start", None, None, gameboard, 2, 2)
 				p1_turn = False
 
 			else:
@@ -127,7 +127,7 @@ if __name__ == "__main__":
 				gameboard[get_token_x][get_token_y] = '-'
 				gameboard[new_x][new_y] = '1'
 
-				game_state = MorrisState("Start", None, None, gameboard, True, False, False)
+				game_state = MorrisState("Start", None, None, gameboard, 3, 2)
 				p1_turn = False
 
 			else:

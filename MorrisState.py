@@ -50,9 +50,9 @@ class MorrisState(StateSpace):
                 for j in range(len(self.gameboard[0])):
                     if self.gameboard[i][j] == '-':
                         arr_copy = [x[:] for x in self.gameboard]
-                        arr_copy[i][j] = self.current_player
+                        arr_copy[i][j] = str(self.current_player)
                         print(arr_copy)
-                        successors.append(MorrisState("START", 0, None, arr_copy, 1, next_turn_player ))
+                        successors.append(MorrisState("START", 0, None, arr_copy, 1, next_turn_player))
         return successors
 
 
@@ -72,8 +72,8 @@ class MorrisState(StateSpace):
         ''' 
 
         state_str = ''
-        for i in range(len(gameboard)):
-            for j in range(len(gameboard[0])):
+        for i in range(len(self.gameboard)):
+            for j in range(len(self.gameboard[0])):
                 if self.gameboard[i][j] == '-':
                     state_str += ' - '
                 else:
@@ -119,5 +119,14 @@ def count_pieces_ingame(gameboard):
 
 def count_pieces_to_put(pieces_in_game, current_player):
     '''calculate how many pieces the current player still needs to set on the board'''
-    number_of_pieces = 9 - pieces_in_game[self.current_player-1]
+    number_of_pieces = 9 - pieces_in_game[current_player-1]
     return number_of_pieces
+
+
+
+
+
+
+
+
+
