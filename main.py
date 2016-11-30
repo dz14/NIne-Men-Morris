@@ -43,6 +43,7 @@ if __name__ == "__main__":
 	gameboard = [['-' for x in range(game_x)] for y in range(game_y)]
 	game_state = MorrisState("START", None, None, gameboard, 1, 1)
 
+
 	while not finished:
 
 		if stage1:
