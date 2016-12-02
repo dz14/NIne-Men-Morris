@@ -94,14 +94,19 @@ class MorrisState(StateSpace):
 
 #TODO
 def morris_goal_state(state):
-  '''Returns True if we have reached a goal state'''
-  '''INPUT: a morris state'''
-  '''OUTPUT: True (if goal) or False (if not)'''  
+    '''Returns True if we have reached a goal state'''
+    '''INPUT: a morris state'''
+    '''OUTPUT: True (if goal) or False (if not)'''
+    
+    if state.stage == 1:
+        return False
+    pieces_ingame = count_pieces_ingame(state)
+    if state.current_player == 0:
+        opponent = 1
+    else:
+        opponent = 0 
+    return pieces_ingame[opponent] < 3
   
-  if state.stage == 1:
-    #returns true if the player has set all pieces to board
-    number_of_pieces = count_pieces_to_put(state.pieces_in_game, state.current_player)
-    return number_of_pieces == 0
 
   
 def count_pieces_ingame(gameboard):
