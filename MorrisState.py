@@ -46,13 +46,19 @@ class MorrisState(StateSpace):
             next_turn_player = 0
             
         if self.stage == 1:
+            count_pieces = count_pieces_ingame(self.gameboard)
+            #change next stage if all 18 pieces is placed on board
+            if count_pieces[0] + count_pieces[1] == 17:
+                new_stage = 2
+            else:
+                new_stage = 1
             for i in range(len(self.gameboard)):
                 for j in range(len(self.gameboard[0])):
                     if self.gameboard[i][j] == '-':
                         arr_copy = [x[:] for x in self.gameboard]
                         arr_copy[i][j] = str(self.current_player)
                         print(arr_copy)
-                        successor_state = MorrisState("START", 0, None, arr_copy, 1, next_turn_player)
+                        successor_state = MorrisState("START", 0, None, arr_copy, new_stage, next_turn_player)
                         successor_state.gval = score(successor_state)
                         successors.appendsuccessor_state
         return successors
