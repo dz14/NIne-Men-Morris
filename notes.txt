@@ -1,0 +1,20 @@
+Feel free to add to these notes to help form the final report.
+
+
+###
+
+While tackling some corner cases, we found that, for a given action, summing 2 mills together resulted in poorer AI behavior. However, summing 2 partial mills resulted in much better performance. Intuitively, this makes sense, as you want to set up more possibilities of future mills than closing 2 opportunities at once, unless that is the only option to mill.
+
+example case:
+
+0     0     y
+  -   -   1    
+	1 1 -    
+0 - -   - - 0
+	- - 1
+  -   1   -  
+x     -     0
+
+for player 0, putting their piece in position x is better than y.
+
+###
