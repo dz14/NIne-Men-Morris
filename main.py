@@ -2,18 +2,32 @@
 from MorrisState import *
 
 def moves_stage1(gameboard):
+	'''
+	Return all the available moves that player 1 can make
+	in the current turn in stage 1
+	'''
+	
 	available_moves = []
 	for i in range(len(gameboard)):
 		for j in range(len(gameboard)):
-			if gameboard[i][j] == '-':
+			if gameboard[i][j] == '0':
 				available_moves.append((i, j))
 	return available_moves
 
-#TODO
 def moves_stage2(gameboard):
+	'''
+	Return all the available moves that player 1 can make
+	in the current turn in stage 2
+	'''
+	
 	return [(0,1), (1, 2), (1, 0), (1, 2)]
 
 def moves_stage3(gameboard):
+	'''
+	Return all the available moves that player 1 can make 
+	in the current turn in stage 3
+	'''
+	
 	available_moves = []
 	for i in range(len(gameboard)):
 		for j in range(len(gameboard)):
@@ -21,16 +35,11 @@ def moves_stage3(gameboard):
 				available_moves.append((i, j))
 	return available_moves
 
-#		[['-', '-', '-'],
-#        ['-', '-', '-'],
-#        ['-', '-', '-']]
-
-
 if __name__ == "__main__":
 
-	#Three Men morris, Nine Men Morris variables
+	#Nine Men Morris variables
 	game_x = 3
-	game_y = 3
+	game_y = 8
 
 	#Game state variables
 	p1_turn = True
@@ -40,7 +49,8 @@ if __name__ == "__main__":
 	stage2 = False
 	stage3 = False
 
-	gameboard = [['-' for x in range(game_x)] for y in range(game_y)]
+	gameboard = [['0' for x in range(game_y)] for y in range(game_x)]
+	print(gameboard)
 	game_state = MorrisState("START", None, None, gameboard, 1, 1)
 
 	while not finished:
@@ -64,7 +74,14 @@ if __name__ == "__main__":
 
 				gameboard[move_x][move_y] = '1'
 
-				game_state = MorrisState("Start", 0, None, gameboard, 1, 2)
+				count_pieces = count_pieces_ingame(gameboard)
+				print(count_pieces)
+				#Check if we can move to stage2
+				if count_pieces[0] + count_pieces[1] + game_state.pieces_lost[0] + game_state.pieces_lost[1]  == 17:
+					stage1 = False
+					stage2 = True
+
+				game_state = MorrisState((move_x, move_y), 0, None, gameboard, 1, 2)
 				p1_turn = False
 
 			else:
