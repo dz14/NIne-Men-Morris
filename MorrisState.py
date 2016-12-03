@@ -50,7 +50,7 @@ class MorrisState(StateSpace):
                         arr_copy = [x[:] for x in self.gameboard]
                         arr_copy[i][j] = str(self.current_player)
                         print(arr_copy)
-                        successor_state = MorrisState([i,j], 0, None, arr_copy, new_stage, next_turn_player,self.pieces_lost)
+                        successor_state = MorrisState([i,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost)
                         #check if player made a move which result in a mill
                         if check_mill(self.gameboard, self.current_player, i, j) == 1:
                             opp_all_mill = True
@@ -60,21 +60,39 @@ class MorrisState(StateSpace):
                                     if arr_copy[o][k] == next_turn_player:
                                         arr_copy1 = [x[:] for x in arr_copy]
                                         arr_copy1[o][k] = '-'
-                                        possible_states.append(MorrisState([o,k], 0, None, arr_copy1, new_stage, next_turn_player,self.pieces_lost))
+                                        possible_states.append(MorrisState([o,k], 0, self, arr_copy1, new_stage, next_turn_player,self.pieces_lost))
                                     #remove opponents pieces that are not in a mill
                                     if check_mill(arr_copy, next_turn_player, o, k) == 0:
                                         opp_all_mill = False
-                                        successor_state = MorrisState([o,k], 0, None, arr_copy1, new_stage, next_turn_player,self.pieces_lost)
-                                        successor_state.pieces_lost[next_turn_player] = self.pieces_lost[next_turn_player] + 1      
-                                        successor_state.gval = score(successor_state)
+                                        successor_state = MorrisState([o,k], 0, self, arr_copy1, new_stage, next_turn_player,self.pieces_lost)
+                                        successor_state.pieces_lost[next_turn_player] = self.pieces_lost[next_turn_player] + 1
+                                        if self.current_player == 0:
+                                            if self.parent != None:
+                                                successor_state.gval = self.parent.gval + score(successor_state)
+                                            else:
+                                                successor_state.gval = score(successor_state)
+                                        else:
+                                            if self.parent != None:
+                                                successor_state.gval = self.parent.gval - score(successor_state)
+                                            else:
+                                                successor_state.gval = -1 * score(successor_state)
                                         successors.append(successor_state)
                             #if all opponent pieces are in a mill, remove one of those
                             if opp_all_mill == True:
                                 for i in range(len(possible_states)):
                                     successors.append(i)
                         else:
-                            successor_state = MorrisState([i,j], 0, None, arr_copy, new_stage, next_turn_player,self.pieces_lost)  
-                            successor_state.gval = score(successor_state)
+                            successor_state = MorrisState([i,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost)  
+                            if self.current_player == 0:
+                                if self.parent != None:
+                                    successor_state.gval = self.parent.gval + score(successor_state)
+                                else:
+                                    successor_state.gval = score(successor_state)
+                            else:
+                                if self.parent != None:
+                                    successor_state.gval = self.parent.gval - score(successor_state)
+                                else: 
+                                    successor_state.gval = -1 * score(successor_state)
                             successors.append(successor_state)
 
         return successors
