@@ -130,7 +130,7 @@ def morris_goal_state(state):
     
     if state.stage == 1:
         return False
-    pieces_ingame = count_pieces_ingame(state)
+    pieces_ingame = count_pieces_ingame(state.gameboard)
     if state.current_player == 0:
         opponent = 1
     else:
