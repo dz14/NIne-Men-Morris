@@ -3,40 +3,33 @@
     A) Class MorrisState
 
     A specializion of the StateSpace Class that is tailored to the game of Nine Mens Morris
-
-    B) class Direction
-
-    An encoding of the directions of movement that are possible for robots in Sokoban.
-
-    Code also contains a list of 40 Sokoban problems for the purpose of testing.
 '''
 
 from search import *
+from heuristics import *
 
 class MorrisState(StateSpace):
 
     def __init__(self, action, gval, parent, gameboard, stage, current_player):
         '''
-        Creates a new Sokoban state.
-        @param width: The room's X dimension (excluding walls).
-        @param height: The room's Y dimension (excluding walls).
-        @param robots: A tuple of all the robots' locations. Each robot is denoted by its index in the list.
-        @param boxes: A frozenset of all the boxes.
-        @param storage: A frozenset of all the storage points.
-        @param obstacles: A frozenset of all the impassable obstacles.
+        Creates a new Morris state.
+        @param gameboard: The nine mens morris gameboard.
+        @param state: The stage that the game is currently in
+        @param current_player: The players whose turn it is
         '''
         StateSpace.__init__(self, action, gval, parent)
         self.gameboard = gameboard    
         self.stage = stage
         self.current_player = current_player
         self.pieces_in_game = count_pieces_ingame(gameboard)
-        self.pieces_lost = []
+        self.pieces_lost = [0, 0]
         
 
     #TODO
     def successors(self):
         '''
-        Generates all the actions that can be performed from this state, and the states those actions will create.        
+        Generates all the actions that can be performed from this state, 
+        and the states those actions will create.        
         '''        
 
         successors = []
@@ -54,41 +47,49 @@ class MorrisState(StateSpace):
                 new_stage = 1
             for i in range(len(self.gameboard)):
                 for j in range(len(self.gameboard[0])):
-                    if self.gameboard[i][j] == '-':
+                    if self.gameboard[i][j] == '0':
                         arr_copy = [x[:] for x in self.gameboard]
                         arr_copy[i][j] = str(self.current_player)
                         print(arr_copy)
-                        successor_state = MorrisState("START", 0, None, arr_copy, new_stage, next_turn_player)
+                        successor_state = MorrisState((i, j), 0, None, arr_copy, new_stage, next_turn_player)
                         successor_state.gval = score(successor_state)
-                        successors.appendsuccessor_state
+                        successors.append(successor_state)
         return successors
 
 
     def hashable_state(self):
-        '''Return a data item that can be used as a dictionary key to UNIQUELY represent a state.'''
+        '''
+        Return a data item that can be used as a dictionary key 
+        to UNIQUELY represent a state.
+        '''
         return hash(tuple(map(tuple,self.gameboard)))      
 
     def state_string(self):
         '''Returns a string representation fo a state that can be printed to stdout.
 
-        E.g. [['-', '0', '1','-', '0', '1','-', '0'],
+            String representation found here: https://files.slack.com/files-pri/T2RNJLS85-F3A7BH2MS/board_grid.jpg
+
+            E.g. [['-', '0', '1','-', '0', '1','-', '0'],
               ['-', '0', '1','-', '0', '1','-', '0'],
               ['-', '0', '1','-', '0', '1','-', '0']
-
     
 
         ''' 
 
-        state_str = ''
-        for i in range(len(self.gameboard)):
-            for j in range(len(self.gameboard[0])):
-                if self.gameboard[i][j] == '-':
-                    state_str += ' - '
-                else:
-                    state_str += ' ' + self.gameboard[i][j] + ' '
-            state_str += "\n" # print new line
-
-        return state_str        
+        board = self.gameboard
+        print(board[0][0] + "----------" + board[0][1] +  "----------" + board[0][2])
+        print("|          |          |")
+        print("|          |          |")
+        print("|     " + board[1][0] + "----" + board[1][1] +  "----" + board[1][2] + "     |")
+        print("|     |    |    |     |")
+        print("|     |  " + board[2][0] + "-" + board[2][1] + "-" + board[2][2] + "  |     |")
+        print(board[0][7] + "-----" + board[1][7] + "--" + board[2][7] + "   " + board[2][3] + "--" + board[1][3] + "-----" + board[0][3])
+        print("|     |  " + board[2][6] + "-" + board[2][5] + "-" + board[2][4] + "  |     |")
+        print("|     |    |    |     |")
+        print("|     " + board[1][6] + "----" + board[1][5] +  "----" + board[1][4] + "     |")
+        print("|          |          |")
+        print("|          |          |")
+        print(board[0][6] + "----------" + board[0][5] +  "----------" + board[0][4])
 
     def print_state(self):
         '''

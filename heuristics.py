@@ -55,6 +55,7 @@ def check_mill(board, player, i, j):
 	@param i: the first coordinate in the board[i][j]
 	@param j: the second coordinate in the board[i][j]
 	'''
+	print(i, j)
 	if (board[i][j] == player):
 		low = j - 1
 		high = j + 1
