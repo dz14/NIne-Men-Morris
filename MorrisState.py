@@ -94,6 +94,12 @@ class MorrisState(StateSpace):
                                 else: 
                                     successor_state.gval = -1 * score(successor_state)
                             successors.append(successor_state)
+                            
+        #elif self.stage == 2:
+            #return None
+        #elif self.stage == 3:
+            #return None
+                
 
         return successors
 
