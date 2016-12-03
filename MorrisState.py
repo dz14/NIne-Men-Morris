@@ -50,7 +50,7 @@ class MorrisState(StateSpace):
                         arr_copy = [x[:] for x in self.gameboard]
                         arr_copy[i][j] = str(self.current_player)
                         print(arr_copy)
-                        successor_state = MorrisState("START", 0, None, arr_copy, new_stage, next_turn_player,pieces_lost)
+                        successor_state = MorrisState("START", 0, None, arr_copy, new_stage, next_turn_player,self.pieces_lost)
                         #check if player made a move which result in a mill
                         if check_mill(self.gameboard, self.current_player, i, j) == 1:
                             opp_all_mill = True
@@ -60,7 +60,7 @@ class MorrisState(StateSpace):
                                     if arr_copy[o][k] == next_turn_player:
                                         arr_copy1 = [x[:] for x in arr_copy]
                                         arr_copy1[o][k] = '-'
-                                        possible_states.append(MorrisState("START", 0, None, arr_copy1, new_stage, next_turn_player,pieces_lost))
+                                        possible_states.append(MorrisState("START", 0, None, arr_copy1, new_stage, next_turn_player,self.pieces_lost))
                                     #remove opponents pieces that are not in a mill
                                     if check_mill(arr_copy, next_turn_player, o, k) == 0:
                                         opp_all_mill = False
@@ -73,7 +73,7 @@ class MorrisState(StateSpace):
                                 for i in range(len(possible_states)):
                                     successors.append(i)
                         else:
-                            successor_state = MorrisState("START", 0, None, arr_copy, new_stage, next_turn_player,pieces_lost)  
+                            successor_state = MorrisState("START", 0, None, arr_copy, new_stage, next_turn_player,self.pieces_lost)  
                             successor_state.gval = score(successor_state)
                             successors.append(successor_state)
 
