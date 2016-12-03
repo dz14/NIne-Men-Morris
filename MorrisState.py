@@ -28,32 +28,56 @@ class MorrisState(StateSpace):
     #TODO
     def successors(self):
         '''
-        Generates all the actions that can be performed from this state, 
-        and the states those actions will create.        
+        Generates all the actions that can be performed from this state, and the states those actions will create.        
         '''        
-
+ 
         successors = []
         if self.current_player == 0:
             next_turn_player = 1
         else:
             next_turn_player = 0
-            
+           
         if self.stage == 1:
             count_pieces = count_pieces_ingame(self.gameboard)
-            #change next stage if all 18 pieces is placed on board
-            if count_pieces[0] + count_pieces[1] == 17:
+            #change next stage if both players placed 18 pieces on board
+            if count_pieces[0] + count_pieces[1] + pieces_lost[0] + pieces_lost[1] == 17:
                 new_stage = 2
             else:
                 new_stage = 1
             for i in range(len(self.gameboard)):
                 for j in range(len(self.gameboard[0])):
-                    if self.gameboard[i][j] == '0':
+                    if self.gameboard[i][j] == '-':
                         arr_copy = [x[:] for x in self.gameboard]
                         arr_copy[i][j] = str(self.current_player)
                         print(arr_copy)
-                        successor_state = MorrisState((i, j), 0, None, arr_copy, new_stage, next_turn_player)
-                        successor_state.gval = score(successor_state)
-                        successors.append(successor_state)
+                        successor_state = MorrisState("START", 0, None, arr_copy, new_stage, next_turn_player)
+                        #check if player made a move which result in a mill
+                        if check_mill(self.gameboard, self.current_player, i, j) == 1:
+                            opp_all_mill = True
+                            possible_states = []
+                            for o in range(len(self.gameboard)):
+                                for k in range(len(self.gameboard[0])):
+                                    if arr_copy[o][k] == next_turn_player:
+                                        arr_copy1 = [x[:] for x in arr_copy]
+                                        arr_copy1[o][k] = '-'
+                                        possible_states.append(MorrisState("START", 0, None, arr_copy1, new_stage, next_turn_player))
+                                    #remove opponents pieces that are not in a mill
+                                    if check_mill(arr_copy, next_turn_player, o, k) == 0:
+                                        opp_all_mill = False
+                                        successor_state = MorrisState("START", 0, None, arr_copy1, new_stage, next_turn_player)
+                                        successor_state.pieces_lost[next_turn_player] = self.pieces_lost[next_turn_player] + 1      
+                                        successor_state.gval = score(successor_state)
+                                        successors.append(successor_state)
+                            #if all opponent pieces are in a mill, remove one of those
+                            if opp_all_mill == True:
+                                for i in range(len(possible_states)):
+                                    successors.append(i)
+                        else:
+                            successor_state = MorrisState("START", 0, None, arr_copy, new_stage, next_turn_player)
+                            successor_state.pieces_lost[next_turn_player] = self.pieces_lost[next_turn_player] + 1      
+                            successor_state.gval = score(successor_state)
+                            successors.append(successor_state)
+
         return successors
 
 
