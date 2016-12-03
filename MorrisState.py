@@ -40,7 +40,7 @@ class MorrisState(StateSpace):
         if self.stage == 1:
             count_pieces = count_pieces_ingame(self.gameboard)
             #change next stage if both players placed 18 pieces on board
-            if count_pieces[0] + count_pieces[1] + pieces_lost[0] + pieces_lost[1] == 17:
+            if count_pieces[0] + count_pieces[1] + self.pieces_lost[0] + self.pieces_lost[1] == 17:
                 new_stage = 2
             else:
                 new_stage = 1
@@ -50,7 +50,7 @@ class MorrisState(StateSpace):
                         arr_copy = [x[:] for x in self.gameboard]
                         arr_copy[i][j] = str(self.current_player)
                         print(arr_copy)
-                        successor_state = MorrisState("START", 0, None, arr_copy, new_stage, next_turn_player,self.pieces_lost)
+                        successor_state = MorrisState([i,j], 0, None, arr_copy, new_stage, next_turn_player,self.pieces_lost)
                         #check if player made a move which result in a mill
                         if check_mill(self.gameboard, self.current_player, i, j) == 1:
                             opp_all_mill = True
@@ -60,11 +60,11 @@ class MorrisState(StateSpace):
                                     if arr_copy[o][k] == next_turn_player:
                                         arr_copy1 = [x[:] for x in arr_copy]
                                         arr_copy1[o][k] = '-'
-                                        possible_states.append(MorrisState("START", 0, None, arr_copy1, new_stage, next_turn_player,self.pieces_lost))
+                                        possible_states.append(MorrisState([o,k], 0, None, arr_copy1, new_stage, next_turn_player,self.pieces_lost))
                                     #remove opponents pieces that are not in a mill
                                     if check_mill(arr_copy, next_turn_player, o, k) == 0:
                                         opp_all_mill = False
-                                        successor_state = MorrisState("START", 0, None, arr_copy1, new_stage, next_turn_player,self.pieces_lost)
+                                        successor_state = MorrisState([o,k], 0, None, arr_copy1, new_stage, next_turn_player,self.pieces_lost)
                                         successor_state.pieces_lost[next_turn_player] = self.pieces_lost[next_turn_player] + 1      
                                         successor_state.gval = score(successor_state)
                                         successors.append(successor_state)
@@ -73,7 +73,7 @@ class MorrisState(StateSpace):
                                 for i in range(len(possible_states)):
                                     successors.append(i)
                         else:
-                            successor_state = MorrisState("START", 0, None, arr_copy, new_stage, next_turn_player,self.pieces_lost)  
+                            successor_state = MorrisState([i,j], 0, None, arr_copy, new_stage, next_turn_player,self.pieces_lost)  
                             successor_state.gval = score(successor_state)
                             successors.append(successor_state)
 
