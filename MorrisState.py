@@ -34,8 +34,12 @@ class MorrisState(StateSpace):
         successors = []
         if self.current_player == 0:
             next_turn_player = 1
+            current_token = '1'
+            other_token = '0'
         else:
             next_turn_player = 0
+            current_token = '0'
+            other_token = '1'
            
         if self.stage == 1:
             count_pieces = count_pieces_ingame(self.gameboard)
@@ -49,7 +53,6 @@ class MorrisState(StateSpace):
                     if self.gameboard[i][j] == '-':
                         arr_copy = [x[:] for x in self.gameboard]
                         arr_copy[i][j] = str(self.current_player)
-                        print(arr_copy)
                         successor_state = MorrisState([i,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost)
                         #check if player made a move which result in a mill
                         if check_mill(self.gameboard, self.current_player, i, j) == 1:
@@ -82,7 +85,7 @@ class MorrisState(StateSpace):
                                 for i in range(len(possible_states)):
                                     successors.append(i)
                         else:
-                            successor_state = MorrisState([i,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost)  
+                            successor_state = MorrisState([i,j], 0, self, arr_copy, new_stage, next_turn_player, self.pieces_lost)  
                             if self.current_player == 0:
                                 if self.parent != None:
                                     successor_state.gval = self.parent.gval + score(successor_state)
@@ -94,12 +97,85 @@ class MorrisState(StateSpace):
                                 else: 
                                     successor_state.gval = -1 * score(successor_state)
                             successors.append(successor_state)
+        elif self.stage == 2:
+            pass
+        else:
+            if count_pieces[current_player] < 3:
+                return []
+            else:
+                for i in range(len(self.gameboard)):
+                    for j in range(len(self.gameboard)):
+
+                        #They can start having flying pieces
+                        if self.gameboard[i][j] == current_token and count_pieces[current_player] == 3: 
                             
-        #elif self.stage == 2:
-            #return None
-        #elif self.stage == 3:
-            #return None
-                
+                            #We have our initial location (i,j) and would like that token to move somewhere.
+                            #We need to check open slots on the board to see where we can move it                  
+                            for x in range(len(self.gameboard)):
+                                for y in range(len(self.gameboard)):
+
+                                    #(x, y) is an open slot so we can move there
+                                    if self.gameboard[x][y] == '-':
+
+                                        arr_copy = [x[:] for x in self.gameboard]
+
+                                        #Put the current player in the new location but remove it from where it was in the copied state
+                                        arr_copy[x][y] = current_token
+                                        arr_copy[i][j] = '-'
+
+                                        #If its a mill then we need to check which tokens it can remove
+                                        if check_mill(self.gameboard, self.current_player, x, y) == 1:
+                                                
+                                            #Check which of the other players tokens it can remove
+                                            for a in range(len(self.gameboard)):
+                                                for b in range(len(self.gameboard)):
+
+                                                    #We are currently evaulating whether we can remove this token from the gameboard
+                                                    if self.gameboard[a][b] == other_token and not check_mill(self.gameboard, next_turn_player, a, b):
+                                                        
+                                                        arr_copy2 = [x[:] for x in arr_copy]
+                                                        arr_copy2[a][b] = '-' #We can remove the token at (a,b)
+
+                                                        pieces_lost = self.pieces_lost
+
+                                                        pieces_lost[self.next_turn_player] = pieces_lost[self.next_turn_player] + 1
+
+                                                        #If we can remove it then we have found a successor state
+                                                        successor_state = MorrisState([a,b], 0, self, arr_copy2, new_stage, next_turn_player, pieces_lost) 
+
+                                                        #Get the gval of the current state
+                                                        if self.current_player == 0:
+                                                            if self.parent != None:
+                                                                successor_state.gval = self.parent.gval + score(successor_state)
+                                                            else:
+                                                                successor_state.gval = score(successor_state)
+                                                        else:
+                                                            if self.parent != None:
+                                                                successor_state.gval = self.parent.gval - score(successor_state)
+                                                            else: 
+                                                                successor_state.gval = -1 * score(successor_state)
+
+                                                        successors.append(successor_state)
+                                        
+                                        else:
+
+                                            #This is the case in which moving it to that location did not form a mill                               
+                                            successor_state = MorrisState([x,y], 0, self, arr_copy, new_stage, next_turn_player, self.pieces_lost) 
+                                           
+                                            #Get the gval of the current state
+                                            if self.current_player == 0:
+                                                if self.parent != None:
+                                                    successor_state.gval = self.parent.gval + score(successor_state)
+                                                else:
+                                                    successor_state.gval = score(successor_state)
+                                            else:
+                                                if self.parent != None:
+                                                    successor_state.gval = self.parent.gval - score(successor_state)
+                                                else: 
+                                                    successor_state.gval = -1 * score(successor_state)
+                                            
+                                            successors.append(successor_state)
+
 
         return successors
 
