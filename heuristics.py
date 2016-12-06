@@ -290,3 +290,13 @@ def blocks_mill(board, player, i, j):
 			or (board[i][high] == enemy and board[i][high1] == enemy):
 				return 1
 	return 0
+
+
+def part_mill_heur_fn(state):
+	'''
+	heuristic function to return the total number of partial mills for the current player
+	as a method to evaluate it.
+	'''
+	board1 = state.board
+	cur_player = str(state.current_player)
+	return count_total_part_mills(board1, cur_player)
