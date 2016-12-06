@@ -104,7 +104,7 @@ class MorrisState(StateSpace):
                 return []
             else:
                 for i in range(len(self.gameboard)):
-                    for j in range(len(self.gameboard)):
+                    for j in range(len(self.gameboard[0])):
 
                         #They can start having flying pieces
                         if self.gameboard[i][j] == current_token and count_pieces[current_player] == 3: 
@@ -112,7 +112,7 @@ class MorrisState(StateSpace):
                             #We have our initial location (i,j) and would like that token to move somewhere.
                             #We need to check open slots on the board to see where we can move it                  
                             for x in range(len(self.gameboard)):
-                                for y in range(len(self.gameboard)):
+                                for y in range(len(self.gameboard[0])):
 
                                     #(x, y) is an open slot so we can move there
                                     if self.gameboard[x][y] == '-':
@@ -128,7 +128,7 @@ class MorrisState(StateSpace):
                                                 
                                             #Check which of the other players tokens it can remove
                                             for a in range(len(self.gameboard)):
-                                                for b in range(len(self.gameboard)):
+                                                for b in range(len(self.gameboard[0])):
 
                                                     #We are currently evaulating whether we can remove this token from the gameboard
                                                     if self.gameboard[a][b] == other_token and not check_mill(self.gameboard, next_turn_player, a, b):
