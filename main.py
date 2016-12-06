@@ -1,6 +1,13 @@
 from MorrisState import *
 from heuristics import *
 
+def test():
+	gameboard = [['-' for x in range(game_y)] for y in range(game_x)]
+	game_state = MorrisState("START", 0, None, gameboard, 1, 1, [0, 0])
+	se = SearchEngine()
+	final = se.search(initState=game_state, goal_fn=morris_goal_state)
+	
+
 def AI_VS_AI():
 	#Nine Men Morris variables
 	game_x = 3

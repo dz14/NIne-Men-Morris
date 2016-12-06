@@ -420,20 +420,10 @@ def morris_goal_state(state):
     '''Returns True if we have reached a goal state'''
     '''INPUT: a morris state'''
     '''OUTPUT: True (if goal) or False (if not)'''
+    if state.stage != 1:
+        count_pieces = count_pieces_ingame(state.gameboard)
+        return count_pieces[0] < 3 or count_pieces[1] < 3
     
-    count_pieces = count_pieces_ingame(state.gameboard)
-    if state.stage == 1:
-        if count_pieces[0] + count_pieces[1] + state.pieces_lost[0] + state.pieces_lost[1] == 18:
-            return True
-        else:
-            return False
-    else:
-        pieces_ingame = count_pieces_ingame(state.gameboard)
-        if state.current_player == 0:
-            opponent = 1
-        else:
-            opponent = 0 
-        return pieces_ingame[opponent] < 3
   
 
   
