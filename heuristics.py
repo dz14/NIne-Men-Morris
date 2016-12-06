@@ -290,23 +290,3 @@ def blocks_mill(board, player, i, j):
 			or (board[i][high] == enemy and board[i][high1] == enemy):
 				return 1
 	return 0
-
-
-
-if __name__ == "__main__":
-	board1 = [['-' for j in range(8)] for i in range(3)]
-	print(board1)
-
-	board1[0][0] = '1'
-	board1[0][1] = '0'
-	board1[0][2] = '1'
-
-	board1[1][1] = '0'
-
-	print(board1)
-
-	
-	parent = MorrisState([0, 3], 0, "", board1, "", '1') # created just so my test state can have a parent
-	successor = MorrisState([0, 1], 0, parent, board1, "", '0')
-
-	print(score(successor))
