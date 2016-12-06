@@ -10,7 +10,7 @@ from heuristics import *
 
 class MorrisState(StateSpace):
 
-    def __init__(self, action, gval, parent, gameboard, stage, current_player,pieces_lost):
+    def __init__(self, action, gval, parent, gameboard, stage, current_player, pieces_lost):
         '''
         Creates a new Morris state.
         @param gameboard: The nine mens morris gameboard.
@@ -42,12 +42,15 @@ class MorrisState(StateSpace):
             other_token = '1'
            
         if self.stage == 1:
+
             count_pieces = count_pieces_ingame(self.gameboard)
+
             #change next stage if both players placed 18 pieces on board
-            if count_pieces[0] + count_pieces[1] + self.pieces_lost[0] + self.pieces_lost[1] == 17:
+            if count_pieces[0] + count_pieces[1] + self.pieces_lost[0] + self.pieces_lost[1] == 18:
                 new_stage = 2
             else:
                 new_stage = 1
+            print("?")
             for i in range(len(self.gameboard)):
                 for j in range(len(self.gameboard[0])):
                     if self.gameboard[i][j] == '-':
@@ -100,6 +103,7 @@ class MorrisState(StateSpace):
         elif self.stage == 2:
             pass
         else:
+            count_pieces = count_pieces_ingame(self.gameboard)
             if count_pieces[current_player] < 3:
                 return []
             else:
@@ -228,14 +232,19 @@ def morris_goal_state(state):
     '''INPUT: a morris state'''
     '''OUTPUT: True (if goal) or False (if not)'''
     
+    count_pieces = count_pieces_ingame(state.gameboard)
     if state.stage == 1:
-        return False
-    pieces_ingame = count_pieces_ingame(state.gameboard)
-    if state.current_player == 0:
-        opponent = 1
+        if count_pieces[0] + count_pieces[1] + state.pieces_lost[0] + state.pieces_lost[1] == 18:
+            return True
+        else:
+            return False
     else:
-        opponent = 0 
-    return pieces_ingame[opponent] < 3
+        pieces_ingame = count_pieces_ingame(state.gameboard)
+        if state.current_player == 0:
+            opponent = 1
+        else:
+            opponent = 0 
+        return pieces_ingame[opponent] < 3
   
 
   
