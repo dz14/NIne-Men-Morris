@@ -19,6 +19,7 @@ def AI_VS_AI():
 
 	se = SearchEngine()
 
+	count = 0
 	while not finished:
 
 		if stage1:
@@ -28,16 +29,27 @@ def AI_VS_AI():
 				print(game_state.state_string())
 
 				final = se.search(initState=game_state, goal_fn=morris_goal_state)
-				game_state = final
+				gameboard[final.action[0]][final.action[1]] = '0'
+				game_state = MorrisState((final.action[0], final.action[1]), final.gval, final.parent, gameboard, 1, 1, [0, 0])
 
 				p1_turn = False
+				count+=1
 
 			else:
+
+				print(game_state.state_string())
+				
 				#Use the current state to generate the next best move
 				final = se.search(initState=game_state, goal_fn=morris_goal_state)
-				game_state = final
+				gameboard[final.action[0]][final.action[1]] = '1'
+				game_state = MorrisState((final.action[0], final.action[1]), final.gval, final.parent, gameboard, 1, 1, [0, 0])
 
 				p1_turn = True
+				count+=1
+
+				if count >= 25:
+					finished = True
+
 
 		elif stage2:
 
@@ -47,15 +59,16 @@ def AI_VS_AI():
 
 				final = se.search(initState=game_state, goal_fn=morris_goal_state)
 				gameboard[final.action[0]][final.action[1]] = '0'
-				game_state = MorrisState((final.action[0], final.action[1]), 0, None, gameboard, 1, 2, [0, 0])
+				game_state = MorrisState((final.action[0], final.action[1]), final.gval, final.parent, gameboard, 1, 1, [0, 0])
 
 				p1_turn = False
 
 			else:
+
 				#Use the current state to generate the next best move
 				final = se.search(initState=game_state, goal_fn=morris_goal_state)
-				gameboard[final.action[0]][final.action[1]] = '1'
-				game_state = MorrisState((final.action[0], final.action[1]), 0, None, gameboard, 1, 2, [0, 0])
+				gameboard[final.action[0]][final.action[1]] = '0'
+				game_state = MorrisState((final.action[0], final.action[1]), final.gval, final.parent, gameboard, 1, 1, [0, 0])
 
 				p1_turn = True
 
@@ -67,15 +80,15 @@ def AI_VS_AI():
 
 				final = se.search(initState=game_state, goal_fn=morris_goal_state)
 				gameboard[final.action[0]][final.action[1]] = '0'
-				game_state = MorrisState((final.action[0], final.action[1]), 0, None, gameboard, 1, 2, [0, 0])
+				game_state = MorrisState((final.action[0], final.action[1]), final.gval, final.parent, gameboard, 1, 1, [0, 0])
 
 				p1_turn = False
 
 			else:
 				#Use the current state to generate the next best move
 				final = se.search(initState=game_state, goal_fn=morris_goal_state)
-				gameboard[final.action[0]][final.action[1]] = '1'
-				game_state = MorrisState((final.action[0], final.action[1]), 0, None, gameboard, 1, 2, [0, 0])
+				gameboard[final.action[0]][final.action[1]] = '0'
+				game_state = MorrisState((final.action[0], final.action[1]), final.gval, final.parent, gameboard, 1, 1, [0, 0])
 
 				p1_turn = True
 
