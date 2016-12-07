@@ -56,8 +56,10 @@ def min_play(game_state):
 
 
 def max_play(game_state):
-  print("Board: ")
-  print(game_state.gameboard)
+  print("Board:")
+  print(game_state.gameboard)  
+  game_state.state_string()
+  
   print("Stage: ")
   print(game_state.stage)
   print("Pieces in game:")
