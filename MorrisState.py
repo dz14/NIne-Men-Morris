@@ -46,7 +46,7 @@ class MorrisState(StateSpace):
             count_pieces = count_pieces_ingame(self.gameboard)
 
             #change next stage if both players placed 18 pieces on board
-            if count_pieces[0] + count_pieces[1] + self.pieces_lost[0] + self.pieces_lost[1] == 17:
+            if count_pieces[0] + count_pieces[1] + self.pieces_lost[0] + self.pieces_lost[1] == 18:
                 new_stage = 2
             else:
                 new_stage = 1
@@ -120,7 +120,177 @@ class MorrisState(StateSpace):
                             successors.append(successor_state)
 
         elif self.stage == 2:
-            pass
+            allStates = []
+            pieces_on_board = count_pieces_ingame(self.gameboard)
+            new_stage = 2
+            for i in range(len(self.gameboard)):
+                for j in range(len(self.gameboard[0])):
+                    if self.gameboard[i][j] == current_token:
+                        arr_copy = [x[:] for x in self.gameboard]
+                        #check if the piece is in the corner and we only 2 adjacent location
+                        if j % 2 == 0:
+                            #special case due to our board design
+                            if j == 0:
+                                if self.gameboard[i][7] == '-':
+                                    #slide player's token
+                                    arr_copy[i][j] = '-'      
+                                    arr_copy[i][7] = current_player 
+                                    allStates.append(MorrisState([i,7], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                if self.gameboard[i][j+1] == '-':
+                                    #slide player's token
+                                    arr_copy[i][j] = '-'      
+                                    arr_copy[i][j+1] = current_player
+                                    allStates.append(MorrisState([i,j+1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                            else:
+                                if self.gameboard[i][j-1] == '-':
+                                    arr_copy[i][j] = '-'      
+                                    arr_copy[i][j-1] = current_player
+                                    allStates.append(MorrisState([i,j-1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                if self.gameboard[i][j+1] == '-':
+                                    #slide player's token
+                                    arr_copy[i][j] = '-'      
+                                    arr_copy[i][j+1] = current_player
+                                    allStates.append(MorrisState([i,j+1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                        #cases where we check 3 adjacent location
+                        elif i % 2 == 0 and j % 2 !=0:
+                            if i == 0:
+                                if j == 7:
+                                    if self.gameboard[i][0] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][0] = current_player
+                                        allStates.append(MorrisState([i,0], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i][j-1] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][j-1] = current_player
+                                        allStates.append(MorrisState([i,j-1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i+1][j] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i+1][j] = current_player
+                                        allStates.append(MorrisState([i+1,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                else:
+                                    if self.gameboard[i][j-1] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][j-1] = current_player
+                                        allStates.append(MorrisState([i,j-1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i][j+1] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][j+1] = current_player
+                                        allStates.append(MorrisState([i,j+1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i+1][j] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i+1][j] = current_player
+                                        allStates.append(MorrisState([i+1,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                            else:
+                                if j == 7:
+                                    if self.gameboard[i][0] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][0] = current_player
+                                        allStates.append(MorrisState([i,0], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i][j-1] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][j-1] = current_player
+                                        allStates.append(MorrisState([i,j-1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i-1][j] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i-1][j] = current_player
+                                        allStates.append(MorrisState([i-1,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                else:
+                                    if self.gameboard[i][j-1] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][j-1] = current_player
+                                        allStates.append(MorrisState([i,j-1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i][j+1] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][j+1] = current_player
+                                        allStates.append(MorrisState([i,j+1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i-1][j] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i-1][j] = current_player
+                                        allStates.append(MorrisState([i-1,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                        #cases where we need to check 4 adjacent location
+                        elif i % 2 != 0 and j % 2 != 0:
+                            if j == 7:
+                                    if self.gameboard[i][0] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][0] = current_player
+                                        allStates.append(MorrisState([i,0], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i][j-1] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][j-1] = current_player
+                                        allStates.append(MorrisState([i,j-1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i-1][j] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i-1][j] = current_player
+                                        allStates.append(MorrisState([i-1,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i+1][j] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i+1][j] = current_player
+                                        allStates.append(MorrisState([i+1,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                            else:
+                                    if self.gameboard[i][j-1] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][j-1] = current_player
+                                        allStates.append(MorrisState([i,j-1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i][j+1] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i][j+1] = current_player
+                                        allStates.append(MorrisState([i,j+1], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i-1][j] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i-1][j] = current_player
+                                        allStates.append(MorrisState([i-1,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+                                    if self.gameboard[i+1][j] == '-':
+                                        arr_copy[i][j] = '-'      
+                                        arr_copy[i+1][j] = current_player
+                                        allStates.append(MorrisState([i+1,j], 0, self, arr_copy, new_stage, next_turn_player,self.pieces_lost))
+            #adding appropriate gval to states, check if mill is made and alter state accordinly
+            for state in allStates:
+                if check_mill(state.gameboard, state.current_player, state.action[0], state.action[1]) == 1:
+                    opp_all_mill = True
+                    possible_states = []
+                    arr_copy = [x[:] for x in state.gameboard]
+                    for o in range(len(state.gameboard)):
+                        for k in range(len(state.gameboard[0])):
+                            if arr_copy[o][k] == next_turn_player:
+                                arr_copy1 = [x[:] for x in arr_copy]
+                                arr_copy1[o][k] = '-'
+                                state.gameboard = arr_copy1
+                                #check if there is a player with 3 pieces on board and change to stage 3
+                                piece_list = count_pieces_ingame(state.gameboard)
+                                if piece_list[0] == 3 or piece_list[1] == 3:
+                                    state.stage = 3 
+                                possible_states.append(state)
+                            if check_mill(arr_copy, next_turn_player, o, k) == 0:
+                                opp_all_mill = False
+                                state.gameboard = arr_copy1
+                                state.pieces_lost[next_turn_player] = state.pieces_lost[next_turn_player] + 1
+                                if state.current_player == 0:
+                                    if state.parent != None:
+                                        state.gval = state.parent.gval + score(state)
+                                    else:
+                                        state.gval = score(state)
+                                else:
+                                    if state.parent != None:
+                                        state.gval = state.parent.gval - score(state)
+                                    else:
+                                        state.gval = -1 * score(state)
+                                successors.append(state)
+                    if opp_all_mill == True:
+                        for i in range(len(possible_states)):
+                            successors.append(i)
+                else:
+                    if state.current_player == 0:
+                        if state.parent != None:
+                            state.gval = state.parent.gval + score(state)
+                        else:
+                            state.gval = score(state)
+                    else:
+                        if state.parent != None:
+                            state.gval = state.parent.gval - score(state)
+                        else:
+                            state.gval = -1 * score(state)
+                        successors.append(state)
+
         else:
             count_pieces = count_pieces_ingame(self.gameboard)
             if count_pieces[current_player] < 3:
@@ -250,13 +420,11 @@ def morris_goal_state(state):
     '''Returns True if we have reached a goal state'''
     '''INPUT: a morris state'''
     '''OUTPUT: True (if goal) or False (if not)'''
-    #count_pieces = count_pieces_ingame(state.gameboard)
-        
+    if state.stage != 1:
+        count_pieces = count_pieces_ingame(state.gameboard)
+        return count_pieces[0] < 3 or count_pieces[1] < 3
     
-    #if state.stage != 1:
-        #return count_pieces[0] < 3 or count_pieces[1] < 3 
-    return state.stage == 1
-    
+  
 
   
 def count_pieces_ingame(gameboard):
