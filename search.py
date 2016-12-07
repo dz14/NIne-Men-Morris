@@ -305,7 +305,7 @@ class SearchEngine:
 
         return rval
 
-    def search(self, initState, goal_fn, heur_fn = _zero_hfn, timebound = 10, fval_function = _fval_function, weight = 0, costbound = 10000000000):
+    def search(self, initState, goal_fn, heur_fn = _zero_hfn, timebound = 1000, fval_function = _fval_function, weight = 0, costbound = 10000000000):
         #Perform full cycle checking as follows
         #a. check state before inserting into OPEN. If we had already reached
         #   the same state via a cheaper path, don't insert into OPEN.

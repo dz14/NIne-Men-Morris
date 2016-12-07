@@ -28,9 +28,10 @@ def AI_VS_AI():
 
 				print(game_state.state_string())
 
-				final = se.search(initState=game_state, goal_fn=morris_goal_state)
-				gameboard[final.action[0]][final.action[1]] = '0'
-				game_state = MorrisState((final.action[0], final.action[1]), final.gval, final.parent, gameboard, 1, 1, [0, 0])
+				#final = se.search(initState=game_state, goal_fn=morris_goal_state)
+				#gameboard[final.action[0]][final.action[1]] = '0'
+				#game_state = MorrisState((final.action[0], final.action[1]), final.gval, final.parent, gameboard, 1, 1, [0, 0])
+				print(game_state.successors())
 
 				p1_turn = False
 				count+=1
