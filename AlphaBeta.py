@@ -61,6 +61,9 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, opening):
 
 		evaluation.positions += 1
 
+	print("Output from ALphaBeta of evaluation.board")
+	print(evaluation.board)
+
 	return evaluation
 
 						

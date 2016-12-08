@@ -44,20 +44,19 @@ if __name__ == "__main__":
 		if stage1:
 		
 			for i in range(9):
+				printBoard(board.gameboard)
+				placePiece(board)
 
-				if not type(board) is list:
-					tempBoard = MorrisState()
-					tempBoard.gameboard = board.gameboard
-
-				printBoard(tempBoard.gameboard)
-				placePiece(tempBoard)
-
-				if getEvaluationStage1(tempBoard) == 100000:
+				if getEvaluationStage1(board) == 100000:
 					print("Winner!")
 					exit(0)
 				
-				printBoard(tempBoard.gameboard)
-				evaluation = alphaBetaPruning(tempBoard, depth, False, alpha, beta, True)	
+				printBoard(board.gameboard)
+				evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
+				print("Evaluation.board:")	
+				print(evaluation.board)
+				print("Evaluation.board.gameboard:")	
+				print(evaluation.board.gameboard)
 
 				if evaluation.evaluator == -100000:
 					print("You Lost")
