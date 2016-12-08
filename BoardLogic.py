@@ -216,11 +216,12 @@ def addPiecesStage23Player1(board):
 def generateInvertedBoards(black_positions):
 	'''
 	'''
-	for i in range(len(black_positions)):
-		temp = black_positions[i].InvertedBoard()
-		black_positions[i] = temp
+	result = []
+	for i in black_positions:
+		
+		result.append(InvertedBoard(i))
 
-	return black_positions
+	return result
 
 
 def getPossibleMills(board, player):

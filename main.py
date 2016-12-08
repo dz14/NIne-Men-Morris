@@ -3,8 +3,8 @@ from FileIO import *
 from AlphaBeta import *
 from BoardLogic import *
 
-alpha = float('inf')
-beta = float('-inf')
+alpha = float('-inf')
+beta = float('inf')
 depth = 3
 
 def printBoard(board):

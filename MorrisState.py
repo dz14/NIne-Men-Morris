@@ -36,5 +36,5 @@ def InvertedBoard(board):
         elif i == "2":
             invertedboard.append("1")
         else:
-            invertedboard.append("-")
+            invertedboard.append("X")
     return invertedboard
