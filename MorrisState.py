@@ -26,27 +26,27 @@ class MorrisState:
         else:
             print("Invalid Board Size")
 
-        def getCloneBoard(self):
-            clone = MorrisState(self.gameboard)
-            return clone
+    def getCloneBoard(self):
+        clone = MorrisState(self.gameboard)
+        return clone
 
-        def getPositionValue(self,position):
-            return self.gameboard[position]
+    def getPositionValue(self,position):
+        return self.gameboard[position]
 
-        def getNumPieces(self,value):
-            return self.gameboard.count(value)
+    def getNumPieces(self,value):
+        return self.gameboard.count(value)
 
-        def setValue(self,position, value):
-            self.gameboard[position] = value
+    def setValue(self,position, value):
+        self.gameboard[position] = value
 
-        def InvertedBoard(self):
-            invertedboard = []
-            for i in self.gameboard:
-                if i == "1":
-                    invertedboard.append("2")
-                elif i == "2":
-                    invertedboard.append("1")
-                else:
-                    invertedboard.append("-")
-            result = MorrisState(invertedboard)
-            return result
+    def InvertedBoard(self):
+        invertedboard = []
+        for i in self.gameboard:
+            if i == "1":
+                invertedboard.append("2")
+            elif i == "2":
+                invertedboard.append("1")
+            else:
+                invertedboard.append("-")
+        result = MorrisState(invertedboard)
+        return result

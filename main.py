@@ -1,6 +1,7 @@
 from evaluator import *
 from FileIO import *
 from AlphaBeta import *
+from BoardLogic import *
 
 alpha = float('inf')
 beta = float('-inf')
@@ -25,7 +26,7 @@ if __init__ == "__main__":
 				print(board)
 				placeNewPiece(board)
 
-				if NineMensMorrisLogic.getEvaluationForOpeningPhase(board) == 100000:
+				if getEvaluationStage1(board) == 100000:
 					print("Winner!")
 					exit(0)
 
@@ -45,7 +46,7 @@ if __init__ == "__main__":
 				print(board)
 				movePiece(board)
 
-				if NineMensMorrisLogic.getEvaluationMidGameAndEndGame(board) == 100000:
+				if getEvaluationStage23(board) == 100000:
 					print("You Win!")
 					exit(0)
 

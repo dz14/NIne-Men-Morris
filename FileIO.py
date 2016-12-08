@@ -1,3 +1,6 @@
+from BoardLogic import *
+
+
 def placePiece(board):
 	while True:
 		try:
@@ -5,7 +8,7 @@ def placePiece(board):
 			
 			if board[pos] == "-":
 				board[pos] = '1'
-				if NineMensMorrisLogic.isCloseMill(n, "1"):
+				if hasMill(n, "1"):
 					removePiece("1")
 					return True
 			else:
@@ -32,7 +35,7 @@ def movePiece(board):
 
 					print("\nWhite moved")
 
-					if NineMensMorrisLogic.isCloseMill(pos, "1"):
+					if hasMill(pos, "1"):
 						removePiece("1")
 
 					return True
@@ -48,7 +51,7 @@ def removePiece(board):
 	while True:
 		try:
 			pos = input("\nWhich black piece do you want to remove?")
-			if board[pos] == "2" and !NineMensMorrisLogic.isCloseMill(pos, "2") or (NineMensMorrisLogic.isCloseMill(pos, "2") and numberOfPieces("1") == 3):
+			if board[pos] == "2" and !hasMill(pos, "2") or (hasMill(pos, "2") and numberOfPieces("1") == 3):
 				board[pos] = "-"
 				return True
 			else:
