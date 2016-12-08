@@ -22,8 +22,6 @@ class MorrisState:
     def getPositionValue(self, position):
         return self.gameboard[position]
 
-
-
     def setValue(self,position, value):
         self.gameboard[position] = value
 

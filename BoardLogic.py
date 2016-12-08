@@ -131,11 +131,11 @@ def removePiece(board_clone, board_list):
 	'''
 	'''
 	for i in range(len(board_clone.gameboard)):
-		if (board_clone.getPositionValue(i) == "1"):
+		if (board_clone[i] == "1"):
 
 			if not hasMill(i, board_clone):
 				new_board = board_clone.getPositionValue()
-				new_board.setPositionValue("X", i)
+				new_board[i] = "X"
 				board_list.add(new_board)
 	return board_list
 
@@ -147,14 +147,14 @@ def addPiecesStage2(board):
 	'''
 	board_list = []
 	for i in range(len(board.gameboard)):
-		if (board.getPositionValue(i) == "2"):
+		if (board[i] == "2"):
 			adjacent_list = adjacentPositions(i)
 
 			for pos in adjacent_list:
-				if (board.getPositionValue(pos) == "X"):
+				if (board[pos] == "X"):
 					board_clone = board.getCloneBoard()
-					board_clone.setPositionValue("X", i)
-					board_clone.setPositionValue("2", pos)
+					board_clone[i] = "X"
+					board_clone[pos] = "2"
 
 					if isMill(pos, board_clone):
 						board_list = removePiece(board_clone, board_list)
@@ -169,14 +169,14 @@ def addPiecesStage3(board):
 	board_list = []
 
 	for i in range(len(board.gameboard)):
-		if (board.getPositionValue(i) == "2"):
+		if (board[i] == "2"):
 
 			for j in range(len(board.gameboard)):
-				if (board.getPositionValue(j) == "X"):
+				if (board[j] == "X"):
 					board_clone = board.getCloneBoard()
 
-					board_clone.setPositionValue("X", i)
-					board_clone.setPositionValue("2", j)
+					board_clone[i] = "X"
+					board_clone[j] = "2"
 
 					if (isMill(j, board_clone)):
 						board_list = removePiece(board_clone, board_list)

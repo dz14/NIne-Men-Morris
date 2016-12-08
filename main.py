@@ -55,8 +55,9 @@ if __name__ == "__main__":
 				if getEvaluationStage1(tempBoard) == 100000:
 					print("Winner!")
 					exit(0)
-	
-				evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
+				
+				printBoard(tempBoard.gameboard)
+				evaluation = alphaBetaPruning(tempBoard, depth, False, alpha, beta, True)	
 
 				if evaluation.evaluator == -100000:
 					print("You Lost")
