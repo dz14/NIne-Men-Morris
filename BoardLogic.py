@@ -1,5 +1,5 @@
 from MorrisState import *
-
+import copy
 
 def adjacentPositions(position):
 	'''
@@ -43,8 +43,8 @@ def isMill(player, board, pos1, pos2):
 	@param pos1: first position index
 	@param pos2: second position index
 	'''
-	if (board.getPositionValue(pos1) == player \
-		and board.getPositionValue(pos2) == player):
+
+	if (board[pos1] == player and board[pos2] == player):
 		return True
 	return False
 
@@ -56,6 +56,7 @@ def checkMill(position, board, player):
 	@param board: the MorrisState of the current board
 	@param player: string representation of the board piece color
 	'''
+
 	mill = [
 		(isMill(player, board, 1, 2) or isMill(player, board, 3, 5)),
 		(isMill(player, board, 0, 2) or isMill(player, board, 9, 17)),
@@ -82,6 +83,7 @@ def checkMill(position, board, player):
 		(isMill(player, board, 6, 14) or isMill(player, board, 21, 23)),
 		(isMill(player, board, 18, 20) or isMill(player, board, 21, 22)),
 	]
+
 	return mill[position]
 
 
@@ -91,10 +93,17 @@ def hasMill(position, board):
 	@param position: the index of the position we're checking
 	@param board: the MorrisState of the current board
 	'''
-	player = board.getPositionValue(position)
+
+	if not type(board) is list:
+		board = board.gameboard
+
+	player = board[position]
+
 	# if position is not empty
-	if (player != "-"):
+	if (player != "X"):
+		
 		return checkMill(position, board, player)
+	
 	return False
 
 def addPieces(board):
@@ -102,16 +111,19 @@ def addPieces(board):
 	'''
 	board_list = []
 
-	for i in range(len(board.gameboard)):
-		# fill empty positions with white
-		if (board.getPositionValue(i) == "-"):
-			board_clone = board.getCloneBoard()
-			board_clone.setValue("2", i)
+	if not type(board) is list:
+		board = board.gameboard
 
-			if (isMill(i, board_clone)):
+	for i in range(len(board)):
+		# fill empty positions with white
+		if (board[i] == "X"):
+			board_clone = copy.deepcopy(board)
+			board_clone[i] = "2"
+
+			if (hasMill(i, board_clone)):
 				board_list = removePiece(board_clone, board_list)
 			else:
-				board_list.append(boardCopy)
+				board_list.append(board_clone)
 	return board_list
 
 
@@ -121,9 +133,9 @@ def removePiece(board_clone, board_list):
 	for i in range(len(board_clone.gameboard)):
 		if (board_clone.getPositionValue(i) == "1"):
 
-			if not isMill(i, board_clone):
+			if not hasMill(i, board_clone):
 				new_board = board_clone.getPositionValue()
-				new_board.setPositionValue("-", i)
+				new_board.setPositionValue("X", i)
 				board_list.add(new_board)
 	return board_list
 
@@ -139,9 +151,9 @@ def addPiecesStage2(board):
 			adjacent_list = adjacentPositions(i)
 
 			for pos in adjacent_list:
-				if (board.getPositionValue(pos) == "-"):
+				if (board.getPositionValue(pos) == "X"):
 					board_clone = board.getCloneBoard()
-					board_clone.setPositionValue("-", i)
+					board_clone.setPositionValue("X", i)
 					board_clone.setPositionValue("2", pos)
 
 					if isMill(pos, board_clone):
@@ -160,10 +172,10 @@ def addPiecesStage3(board):
 		if (board.getPositionValue(i) == "2"):
 
 			for j in range(len(board.gameboard)):
-				if (board.getPositionValue(j) == "-"):
+				if (board.getPositionValue(j) == "X"):
 					board_clone = board.getCloneBoard()
 
-					board_clone.setPositionValue("-", i)
+					board_clone.setPositionValue("X", i)
 					board_clone.setPositionValue("2", j)
 
 					if (isMill(j, board_clone)):
@@ -182,7 +194,7 @@ def addPiecesStage1(board):
 def addPiecesStage1Player1(board):
 	'''
 	'''
-	inv_board = board.InvertedBoard()
+	inv_board = InvertedBoard(board)
 
 	positions = addPiecesStage1(inv_board)
 	possible_moves = generateInvertedBoards(positions)
@@ -191,7 +203,7 @@ def addPiecesStage1Player1(board):
 
 
 def addPiecesStage23(board):
-	if (board.getNumPieces("2") == _END_GAME_PIECES):
+	if (getNumPieces(board, "2") == _END_GAME_PIECES):
 		return addPiecesStage3(board)
 	else:
 		addPiecesStage2(board)
@@ -220,8 +232,11 @@ def getPossibleMills(board, player):
 	'''
 	mills = 0
 
-	for i in range(len(board.gameboard)):
-		if (board.getPositionValue(i) == "-"):
+	if not type(board) is list:
+		board = board.gameboard
+
+	for i in range(len(board)):
+		if (board[i] == "X"):
 			if checkMill(i, board, player):
 				mills += 1
 	return mills
@@ -230,8 +245,10 @@ def getPossibleMills(board, player):
 def getEvaluationStage1(board):
 	'''
 	'''
-	pieces1 = board.getNumPieces("1")
-	pieces2 = board.getNumPieces("2")
+
+
+	pieces1 = getNumPieces(board.gameboard, "1")
+	pieces2 = getNumPieces(board.gameboard, "2")
 	mills = getPossibleMills(board, "2")
 
 	return pieces2 - pieces1 + mills
@@ -267,7 +284,7 @@ def potentialMill(position, board, player):
 	adjacent_list = adjacentPositions(position)
 
 	for i in adjacent_list:
-		if (board.getPositionValue(i) == player) \
+		if (board[i] == player) \
 			and (not checkMill(position, board, player)):
 			return True
 	return False
@@ -277,19 +294,21 @@ def getPiecesInPotentialMill(board, player):
 	'''
 	'''
 	count = 0
+	if not type(board) is list:
+		board = board.gameboard
 
-	for i in range(len(board.gameboard)):
-		if (board.getPositionValue(i) == player):
+	for i in range(len(board)):
+		if (board[i] == player):
 			adjacent_list = adjacentPositions(i)
 			for pos in adjacent_list:
 				if (player == "2"):
-					if (board.getPositionValue(pos) == "1"):
-						board.setPositionValue("1", i)
+					if (board[pos] == "1"):
+						board[i] = "1"
 						if hasMill(i, board):
 							count += 1
-						board.setPositionValue(player, i)
+						board[i] = player
 				else:
-					if (board.getPositionValue(pos) == "2" \
+					if (board[pos] == "2" \
 						and potentialMill(pos, board, "2")):
 						count += 1
 	return count
@@ -300,8 +319,8 @@ def getEvaluationImproved(board, isStage1):
 	'''
 	evaluation = 0
 
-	pieces1 = board.getNumPieces("1")
-	pieces2 = board.getNumPieces("2")
+	pieces1 = getNumPieces(board, "1")
+	pieces2 = getNumPieces(board, "2")
 
 	possible_mills1 = getPossibleMills(board, "1")
 	possible_mills2 = getPossibleMills(board, "2")

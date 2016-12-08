@@ -1,39 +1,42 @@
 from Evaluator import *
+from BoardLogic import *
+from MorrisState import *
 
 def alphaBetaPruning(board, depth, player1, alpha, beta, opening):
-	evaluation = evaluator()
+	evaluation = evaluator(board)
 
 	if depth != 0:
 		possible_configs = None
-		current_eval = evaluator()
+		current_eval = evaluator(board)
 
 		if player1:
+
 			if opening:
-				possible_configs = AddMovesForStage1
+				possible_configs = addPiecesStage1Player1(board)
 			else:
-				possible_configs = AddPiecesforStage23
+				possible_configs = addPiecesStage23Player1(board)
 		else:
 			if opening:
-				possible_configs = AddMovesForStage1
+				possible_configs = addPiecesStage1(board)
 			else:
-				possible_configs = AddPiecesforStage23
+				possible_configs = addPiecesStage23(board)
 
 		for move in possible_configs:
 
 			if player1:
 
-				current_eval = alphaBetaPruning(move, depth - 1, false, alpha, beta, opening)
+				current_eval = alphaBetaPruning(move, depth - 1, False, alpha, beta, opening)
 
-				#Do the final evaulation get move
-				
+				evaluation.positions = evaluation.positions + current_eval.positions
+
 				if current_eval.evaluator > alpha:
 					alpha = current_eval.evaluator
 					evaluation.board = move
 			else:
 
-				current_eval = alphaBetaPruning(move, depth - 1, false, alpha, beta, opening)
+				current_eval = alphaBetaPruning(move, depth - 1, False, alpha, beta, opening)
 
-				#Do the final evaulation get move
+				evaluation.positions = evaluation.positions + current_eval.positions
 				
 				if current_eval.evaluator > alpha:
 					alpha = current_eval.evaluator
@@ -49,11 +52,11 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, opening):
 	else:
 
 		if player1:
-			evaluation.evaluator = getEvaluationImproved
+			evaluation.evaluator = getEvaluationImproved(board, opening)
 		else:
-			evaluation.evaluator = getEvaluationImproved inverted board
+			evaluation.evaluator = getEvaluationImproved(InvertedBoard(board), opening)
 
-		evaluation.possible_configs += 1
+		evaluation.positions += 1
 
 	return evaluation
 
