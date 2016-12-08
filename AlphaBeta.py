@@ -38,7 +38,7 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, opening):
 
 				evaluation.positions = evaluation.positions + current_eval.positions
 				
-				if current_eval.evaluator > alpha:
+				if current_eval.evaluator < beta:
 					alpha = current_eval.evaluator
 					evaluation.board = move
 
@@ -49,6 +49,7 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, opening):
 			evaluation.evaluation = alpha
 		else:
 			evaluation.evaluation = beta
+			
 	else:
 
 		if player1:

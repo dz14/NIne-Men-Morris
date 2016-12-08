@@ -9,25 +9,26 @@ depth = 3
 
 def printBoard(board):
 		
-		print(board.getPositionValue(0)+"(00)----------------------"+board.getPositionValue(1)+"(01)----------------------"+board.getPositionValue(2)+"(02)");
+		print(board[0]+"(00)----------------------"+board[1]+"(01)----------------------"+board[2]+"(02)");
 		print("|                           |                           |");
-		print("|       "+board.getPositionValue(8)+"(08)--------------"+board.getPositionValue(9)+"(09)--------------"+board.getPositionValue(10)+"(10)     |");
+		print("|       "+board[8]+"(08)--------------"+board[9]+"(09)--------------"+board[10]+"(10)     |");
 		print("|       |                   |                    |      |");
 		print("|       |                   |                    |      |");
-		print("|       |        "+board.getPositionValue(16)+"(16)-----"+board.getPositionValue(17)+"(17)-----"+board.getPositionValue(18)+"(18)       |      |");
+		print("|       |        "+board[16]+"(16)-----"+board[17]+"(17)-----"+board[18]+"(18)       |      |");
 		print("|       |         |                   |          |      |");
 		print("|       |         |                   |          |      |");
-		print(board.getPositionValue(3)+"(03)---"+board.getPositionValue(11)+"(11)----"+board.getPositionValue(19)+"(19)               "+board.getPositionValue(20)+"(20)----"+board.getPositionValue(12)+"(12)---"+board.getPositionValue(4)+"(04)");
+		print(board[3]+"(03)---"+board[11]+"(11)----"+board[19]+"(19)               "+board[20]+"(20)----"+board[12]+"(12)---"+board[4]+"(04)");
 		print("|       |         |                   |          |      |");
 		print("|       |         |                   |          |      |");
-		print("|       |        "+board.getPositionValue(21)+"(21)-----"+board.getPositionValue(22)+"(22)-----"+board.getPositionValue(23)+"(23)       |      |");
+		print("|       |        "+board[21]+"(21)-----"+board[22]+"(22)-----"+board[23]+"(23)       |      |");
 		print("|       |                   |                    |      |");
 		print("|       |                   |                    |      |");
-		print("|       "+board.getPositionValue(13)+"(13)--------------"+board.getPositionValue(14)+"(14)--------------"+board.getPositionValue(15)+"(15)     |");
+		print("|       "+board[13]+"(13)--------------"+board[14]+"(14)--------------"+board[15]+"(15)     |");
 		print("|                           |                           |");
 		print("|                           |                           |");
-		print(board.getPositionValue(5)+"(05)----------------------"+board.getPositionValue(6)+"(06)----------------------"+board.getPositionValue(7)+"(07)");
-		
+		print(board[5]+"(05)----------------------"+board[6]+"(06)----------------------"+board[7]+"(07)");
+	
+
 
 
 if __name__ == "__main__":
@@ -44,16 +45,19 @@ if __name__ == "__main__":
 		
 			for i in range(9):
 
-				printBoard(board)
-				placePiece(board)
+				if not type(board) is list:
+					tempBoard = MorrisState()
+					tempBoard.gameboard = board.gameboard
 
-				if getEvaluationStage1(board) == 100000:
+				printBoard(tempBoard.gameboard)
+				placePiece(tempBoard)
+
+				if getEvaluationStage1(tempBoard) == 100000:
 					print("Winner!")
 					exit(0)
-
-				printBoard(board)
+	
 				evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
-				
+
 				if evaluation.evaluator == -100000:
 					print("You Lost")
 					exit(0)
