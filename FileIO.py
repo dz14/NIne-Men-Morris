@@ -1,7 +1,10 @@
 from BoardLogic import *
+from MorrisState import *
 
 def placePiece(board):
-	while True:
+	notFound = True
+	removePieces = False
+	while notFound:
 		try:
 
 			pos = int(input("\nWhere do you want to place the WHITE piece?"))	
@@ -9,8 +12,11 @@ def placePiece(board):
 				board[pos] = '1'
 				print("hit?")
 				if hasMill(pos, board):
-					removePiece(board)
-				return True
+					board = removePiece(board)
+					removePieces = True
+				notFound = False
+				print("?")
+				return (board, removePieces)
 			else:
 				print("There is already a piece there")
 
@@ -20,14 +26,14 @@ def placePiece(board):
 def movePiece(board):
 	while True:
 		try:
-			pos = input("\nWhich WHITE piece do you want to move?: ")
+			pos = int(input("\nWhich WHITE piece do you want to move?: "))
 
 			if board[pos] != '1':
 				print("Thats not your piece")
 				continue
 
 			while True:
-				newPos = input("Where do you want to place the white piece?")
+				newPos = int(input("Where do you want to place the white piece?"))
 
 				if board[newPos] == "X":
 					board[pos] = 'X'
@@ -35,8 +41,8 @@ def movePiece(board):
 
 					print("\nWhite moved")
 
-					if hasMill(pos, "1"):
-						removePiece("1")
+					if hasMill(pos, board):
+						removePiece(board)
 
 					return True
 
@@ -48,12 +54,14 @@ def movePiece(board):
 			print("You cannot move there")
 
 def removePiece(board):
-	while True:
+	notFound = True
+	while notFound:
 		try:
-			pos = input("\nWhich black piece do you want to remove?")
-			if board[pos] == "2" and not hasMill(pos, "2") or (hasMill(pos, "2") and numberOfPieces("1") == 3):
+			pos = int(input("\nWhich black piece do you want to remove?"))
+			if board[pos] == "2" and not hasMill(pos, board) or (hasMill(pos, board) and getNumPieces(board, "1") == 3):
 				board[pos] = "X"
-				return True
+				notFound = False
+				return board
 			else:
 				print("Invalid position")
 				continue

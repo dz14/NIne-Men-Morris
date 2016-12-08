@@ -42,21 +42,30 @@ if __name__ == "__main__":
 
 		
 	for i in range(9):
+
+		print("fst")
 		printBoard(board)
-		placePiece(board)
+	
+		b = placePiece(board)
+		board = b[0]
 
 		if getEvaluationStage1(board) == 100000:
 			print("Winner!")
 			exit(0)
 		
 		printBoard(board)
+		print("snd")
+		print(board)
 		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
 
 		if evaluation.evaluator == -100000:
 			print("You Lost")
 			exit(0)
 		else:
-			board = getGlobalVal()[0]
+			if b[1]:
+				board = getGlobalVal()[1]
+			else:
+				board = getGlobalVal()[0]
 
 	while True:
 

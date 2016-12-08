@@ -1,6 +1,8 @@
 from MorrisState import *
 import copy
 
+_END_GAME_PIECES = 3
+
 def adjacentPositions(position):
 	'''
 	Return pieces adjacent to the piece at position
