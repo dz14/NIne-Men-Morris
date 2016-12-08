@@ -35,53 +35,62 @@ if __name__ == "__main__":
 	
 
 	board = MorrisState()
-	stage1 = True
-	finished = False
 
 	evaluation = evaluator(board)
 
-	while not finished:
-		if stage1:
 		
-			for i in range(9):
-				printBoard(board.gameboard)
-				placePiece(board)
+	for i in range(9):
+		printBoard(board.gameboard)
+		placePiece(board)
 
-				if getEvaluationStage1(board) == 100000:
-					print("Winner!")
-					exit(0)
-				
-				printBoard(board.gameboard)
-				evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
-				print("Evaluation.board:")	
-				print(evaluation.board)
-				print("Evaluation.board.gameboard:")	
-				print(evaluation.board.gameboard)
-
-				if evaluation.evaluator == -100000:
-					print("You Lost")
-					exit(0)
-				else:
-					board = evaluation.board
+		if getEvaluationStage1(board) == 100000:
+			print("Winner!")
+			exit(0)
 		
+		printBoard(board.gameboard)
+		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
+		print("Evaluation.board:")	
+		print(evaluation.board)
+		print("Evaluation.board.gameboard:")	
+		print(evaluation.board.gameboard)
+
+		if evaluation.evaluator == -100000:
+			print("You Lost")
+			exit(0)
 		else:
-		
-			while True:
+			board = evaluation.board
 
-				printBoard(board)
-				movePiece(board)
+	while True:
 
-				if getEvaluationStage23(board) == 100000:
-					print("You Win!")
-					exit(0)
+		printBoard(board)
+		movePiece(board)
 
-				printBoard(board)
+		if getEvaluationStage23(board) == 100000:
+			print("You Win!")
+			exit(0)
 
-				evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
+		printBoard(board)
 
-				if evaluation.evaluator == -100000:
-					print("You Lost")
-					exit(0)
-				else:
-					board = evaluation.board
+		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
+
+		if evaluation.evaluator == -100000:
+			print("You Lost")
+			exit(0)
+		else:
+			board = evaluation.board
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			
 	
