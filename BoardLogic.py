@@ -130,9 +130,9 @@ def removePiece(board_clone, board_list):
 		if (board_clone[i] == "1"):
 
 			if not hasMill(i, board_clone):
-				new_board = board_clone.getPositionValue()
+				new_board = copy.deepcopy(board_clone)
 				new_board[i] = "X"
-				board_list.add(new_board)
+				board_list.append(new_board)
 	return board_list
 
 

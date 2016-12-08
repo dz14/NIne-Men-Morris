@@ -10,12 +10,10 @@ def placePiece(board):
 			pos = int(input("\nWhere do you want to place the WHITE piece?"))	
 			if board[pos] == "X":
 				board[pos] = '1'
-				print("hit?")
 				if hasMill(pos, board):
 					board = removePiece(board)
 					removePieces = True
 				notFound = False
-				print("?")
 				return (board, removePieces)
 			else:
 				print("There is already a piece there")

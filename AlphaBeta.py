@@ -2,8 +2,6 @@ from Evaluator import *
 from BoardLogic import *
 from MorrisState import *
 
-glob_eval = []
-
 def alphaBetaPruning(board, depth, player1, alpha, beta, opening):
 	evaluation = evaluator(board)
 
@@ -62,18 +60,8 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, opening):
 			evaluation.evaluator = getEvaluationImproved(InvertedBoard(board), opening)
 
 		evaluation.positions += 1
-
-	glob_eval.append(evaluation.board)
 	
-
 	return evaluation
 
-def getGlobalVal():
-	global glob_eval
-	glob = glob_eval
-	glob_eval = []
-	print("Glob is: ")
-	print(glob)
-	return glob
 						
 
