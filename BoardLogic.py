@@ -91,13 +91,13 @@ def hasMill(position, board):
 	@param position: the index of the position we're checking
 	@param board: the MorrisState of the current board
 	'''
-	player = board.getPositionValue(position):
+	player = board.getPositionValue(position)
 	# if position is not empty
 	if (player != "-"):
 		return checkMill(position, board, player)
 	return False
 
-def addPieces(MorrisState board):
+def addPieces(board):
 	'''
 	'''
 	board_list = []
@@ -121,7 +121,7 @@ def removePiece(board_clone, board_list):
 	for i in range(len(board_clone.gameboard)):
 		if (board_clone.getPositionValue(i) == "1"):
 
-			if !isMill(i, board_clone):
+			if not isMill(i, board_clone):
 				new_board = board_clone.getPositionValue()
 				new_board.setPositionValue("-", i)
 				board_list.add(new_board)
@@ -268,7 +268,7 @@ def potentialMill(position, board, player):
 
 	for i in adjacent_list:
 		if (board.getPositionValue(i) == player) \
-			and (!checkMill(position, board, player)):
+			and (not checkMill(position, board, player)):
 			return True
 	return False
 
@@ -309,7 +309,7 @@ def getEvaluationImproved(board, isStage1):
 	moves1 = 0
 	moves2 = 0
 
-	if (!isStage1):
+	if (not isStage1):
 		board_list1 = addPiecesStage23Player1(board)
 
 		moves1 = len(board_list1)
@@ -317,7 +317,7 @@ def getEvaluationImproved(board, isStage1):
 	potential_mills1 = getPiecesInPotentialMill(board, "1")
 	potential_mills2 = getPiecesInPotentialMill(board, "2")
 
-	if (!isStage1):
+	if (not isStage1):
 		if pieces1 <= 2:
 			evaluation = 100000
 		elif (moves1 == 0):
@@ -343,7 +343,3 @@ def getEvaluationImproved(board, isStage1):
 			evaluation += 500 * potential_mills1
 		evaluation -= 10 * moves1
 	return evaluation
-
-if __name__ == "__main__":
-	for i in range(24):
-		print(checkMill(i, MorrisState(["1" for i in range(24)]), "2"))
