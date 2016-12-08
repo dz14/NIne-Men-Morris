@@ -94,9 +94,6 @@ def hasMill(position, board):
 	@param board: the MorrisState of the current board
 	'''
 
-	if not type(board) is list:
-		board = board.gameboard
-
 	player = board[position]
 
 	# if position is not empty
@@ -110,9 +107,6 @@ def addPieces(board):
 	'''
 	'''
 	board_list = []
-
-	if not type(board) is list:
-		board = board.gameboard
 
 	for i in range(len(board)):
 		# fill empty positions with white
@@ -130,7 +124,7 @@ def addPieces(board):
 def removePiece(board_clone, board_list):
 	'''
 	'''
-	for i in range(len(board_clone.gameboard)):
+	for i in range(len(board_clone)):
 		if (board_clone[i] == "1"):
 
 			if not hasMill(i, board_clone):
@@ -146,13 +140,13 @@ def addPiecesStage2(board):
 	@param board: current MorrisState
 	'''
 	board_list = []
-	for i in range(len(board.gameboard)):
+	for i in range(len(board)):
 		if (board[i] == "2"):
 			adjacent_list = adjacentPositions(i)
 
 			for pos in adjacent_list:
 				if (board[pos] == "X"):
-					board_clone = board.getCloneBoard()
+					board_clone = copy.deepcopy(board)
 					board_clone[i] = "X"
 					board_clone[pos] = "2"
 
@@ -168,12 +162,12 @@ def addPiecesStage3(board):
 	'''
 	board_list = []
 
-	for i in range(len(board.gameboard)):
+	for i in range(len(board)):
 		if (board[i] == "2"):
 
-			for j in range(len(board.gameboard)):
+			for j in range(len(board)):
 				if (board[j] == "X"):
-					board_clone = board.getCloneBoard()
+					board_clone = copy.deepcopy(board)
 
 					board_clone[i] = "X"
 					board_clone[j] = "2"
@@ -232,9 +226,6 @@ def getPossibleMills(board, player):
 	'''
 	mills = 0
 
-	if not type(board) is list:
-		board = board.gameboard
-
 	for i in range(len(board)):
 		if (board[i] == "X"):
 			if checkMill(i, board, player):
@@ -246,9 +237,8 @@ def getEvaluationStage1(board):
 	'''
 	'''
 
-
-	pieces1 = getNumPieces(board.gameboard, "1")
-	pieces2 = getNumPieces(board.gameboard, "2")
+	pieces1 = getNumPieces(board, "1")
+	pieces2 = getNumPieces(board, "1")
 	mills = getPossibleMills(board, "2")
 
 	return pieces2 - pieces1 + mills
@@ -257,8 +247,8 @@ def getEvaluationStage1(board):
 def getEvaluationStage23(board):
 	'''
 	'''
-	pieces1 = board.getNumPieces("1")
-	pieces2 = board.getNumPieces("2")
+	pieces1 = getNumPieces(board, "1")
+	pieces2 = getNumPieces(board, "1")
 	mills = getPossibleMills(board, "2")
 
 	evaluation = 0
@@ -294,8 +284,6 @@ def getPiecesInPotentialMill(board, player):
 	'''
 	'''
 	count = 0
-	if not type(board) is list:
-		board = board.gameboard
 
 	for i in range(len(board)):
 		if (board[i] == player):

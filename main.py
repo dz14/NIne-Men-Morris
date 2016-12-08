@@ -34,31 +34,29 @@ def printBoard(board):
 if __name__ == "__main__":
 	
 
-	board = MorrisState()
+	board = []
+	for i in range(24):
+		board.append("X")
 
 	evaluation = evaluator(board)
 
 		
 	for i in range(9):
-		printBoard(board.gameboard)
+		printBoard(board)
 		placePiece(board)
 
 		if getEvaluationStage1(board) == 100000:
 			print("Winner!")
 			exit(0)
 		
-		printBoard(board.gameboard)
+		printBoard(board)
 		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
-		print("Evaluation.board:")	
-		print(evaluation.board)
-		print("Evaluation.board.gameboard:")	
-		print(evaluation.board.gameboard)
 
 		if evaluation.evaluator == -100000:
 			print("You Lost")
 			exit(0)
 		else:
-			board = evaluation.board
+			board = getGlobalVal()[0]
 
 	while True:
 
@@ -92,5 +90,5 @@ if __name__ == "__main__":
 
 
 
-			
+
 	

@@ -5,8 +5,8 @@ def placePiece(board):
 		try:
 
 			pos = int(input("\nWhere do you want to place the WHITE piece?"))	
-			if board.gameboard[pos] == "X":
-				board.gameboard[pos] = '1'
+			if board[pos] == "X":
+				board[pos] = '1'
 				print("hit?")
 				if hasMill(pos, board):
 					removePiece(board)

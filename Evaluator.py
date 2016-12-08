@@ -4,4 +4,5 @@ class evaluator():
  		self.evaluator = 0
  		self.positions = 0
  		self.board = board
+ 		self.moves = []
 
