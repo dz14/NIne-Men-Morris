@@ -310,22 +310,22 @@ def getEvaluationImproved(board, isStage1):
 	'''
 	evaluation = 0
 
-	pieces1 = getNumPieces(board, "1")
-	pieces2 = getNumPieces(board, "2")
+	numWhitePieces = getNumPieces(board, "1")
+	numBlackPieces = getNumPieces(board, "2")
 
-	possible_mills1 = getPossibleMills(board, "1")
-	possible_mills2 = getPossibleMills(board, "2")
+	numPossibleMillsWhite = getPossibleMills(board, "1")
+	numPossibleMillsBlack = getPossibleMills(board, "2")
 
-	moves1 = 0
-	moves2 = 0
+	moveablePiecesWhite = 0
+	moveablePiecesBlack = 0
 
 	if (not isStage1):
 		board_list1 = addPiecesStage23Player1(board)
 
 		moves1 = len(board_list1)
 
-	potential_mills1 = getPiecesInPotentialMill(board, "1")
-	potential_mills2 = getPiecesInPotentialMill(board, "2")
+	potentialMillsWhite = getPiecesInPotentialMill(board, "1")
+	potentialMillsBlack = getPiecesInPotentialMill(board, "2")
 
 	if (not isStage1):
 		if pieces1 <= 2:
@@ -344,12 +344,12 @@ def getEvaluationImproved(board, isStage1):
 				evaluation += 500 * potential_mills1
 			evaluation -= 10 * moves1
 	else:
-		evaluation = 100 * pieces2 - pieces1
-		if pieces2 < 4:
-			evaluation += 500 * possible_mills2
-			evaluation += 1000 * potential_mills1
+		evaluation = 100 * (numWhitePieces - numBlackPieces)
+		if numWhitePieces < 4:
+			evaluation += 500 * numPossibleMillsWhite
+			evaluation += 1000 * potentialMillsBlack
 		else:
-			evaluation += 1000 * possible_mills2
-			evaluation += 500 * potential_mills1
-		evaluation -= 10 * moves1
+			evaluation += 1000 * numPossibleMillsWhite
+			evaluation += 500 * potentialMillsBlack
+		evaluation -= 10 * moveablePiecesBlack
 	return evaluation

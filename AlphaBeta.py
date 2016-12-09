@@ -9,7 +9,7 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, opening):
 		possible_configs = None
 		current_eval = evaluator(board)
 
-		if player1:
+		if not player1:
 
 			if opening:
 				possible_configs = addPiecesStage1Player1(board)
@@ -56,8 +56,10 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, opening):
 
 		if player1:
 			evaluation.evaluator = getEvaluationImproved(board, opening)
+			print(getEvaluationImproved(board, opening))
 		else:
 			evaluation.evaluator = getEvaluationImproved(InvertedBoard(board), opening)
+			print(getEvaluationImproved(board, opening))
 
 		evaluation.positions += 1
 	
