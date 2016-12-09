@@ -1,6 +1,7 @@
 from AlphaBeta import *
 from BoardLogic import *
 from heuristics import *
+import time
 
 alpha = float('-inf')
 beta = float('inf')
@@ -36,11 +37,15 @@ def AI_VS_AI(heuristic1, heuristic2):
 		board.append("X")
 
 	evaluation = evaluator()
-		
+	
+	print("Stage 1")
 	for i in range(9):
 
-		printBoard(board)
-		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, True, heuristic1)
+		#printBoard(board)
+		start = time.clock()
+		evalBoard = minimax(board, ai_depth, True, alpha, beta, True, heuristic1)
+		end = time.clock()
+		print(str(getStatesReached()) + " states reached! in time " + str(end-start))
 
 		if evalBoard.evaluator == float('inf'):
 			print("AI Bot 1 has won!")
@@ -48,7 +53,7 @@ def AI_VS_AI(heuristic1, heuristic2):
 		else:
 			board = evalBoard.board
 		
-		printBoard(board)
+		#printBoard(board)
 		evalBoard = alphaBetaPruning(board, ai_depth, False, alpha, beta, True, heuristic2)
 		
 		if evalBoard.evaluator == float('-inf'):
@@ -57,10 +62,14 @@ def AI_VS_AI(heuristic1, heuristic2):
 		else:
 			board = evalBoard.board
 
+	print("Stage 2")
 	while True:
 
-		printBoard(board)
+		#printBoard(board)
+		start = time.clock()
 		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, False, heuristic1)
+		end = time.clock()
+		print(str(getPruned()) + " states pruned and " + str(getStatesReached()) + " states reached! in time " + str(end-start))
 
 		if evalBoard.evaluator == float('inf'):
 			print("AI Bot 1 has won!")
@@ -68,7 +77,7 @@ def AI_VS_AI(heuristic1, heuristic2):
 		else:
 			board = evalBoard.board
 
-		printBoard(board)
+		#printBoard(board)
 		evaluation = alphaBetaPruning(board, ai_depth, False, alpha, beta, False, heuristic2)
 
 		if evaluation.evaluator == float('-inf'):
@@ -212,9 +221,9 @@ if __name__ == "__main__":
 		gametype = input("Please enter 1 or 2")
 
 	if gametype == "1":
-		HUMAN_VS_AI(potentialMillsHeuristic, AdvancedHeuristic)
+		HUMAN_VS_AI(numberOfPiecesHeuristic, AdvancedHeuristic)
 	elif gametype == "2":
-		AI_VS_AI(potentialMillsHeuristic, numberOfPiecesHeuristic)
+		AI_VS_AI(AdvancedHeuristic, AdvancedHeuristic)
 
 	
 
