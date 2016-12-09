@@ -38,7 +38,7 @@ def checkMillFormation(position, board, player):
 	'''
 	Return True if there's a mill at position for player on given board
 	@param position: the index of the position we're checking
-	@param board: the MorrisState of the current board
+	@param board: the list of the current board
 	@param player: string representation of the board piece color
 	'''
 
@@ -75,7 +75,7 @@ def isMill(player, board, pos1, pos2):
 	'''
 	Return True if pos1 and pos2 on board both belong to player
 	@param player: string representation of the board piece color
-	@param board: current MorrisState
+	@param board: current list
 	@param pos1: first position index
 	@param pos2: second position index
 	'''
@@ -88,7 +88,7 @@ def isCloseMill(position, board):
 	'''
 	Return True if any player has a mill on position
 	@param position: the index of the position we're checking
-	@param board: the MorrisState of the current board
+	@param board: the list of the current board
 	'''
 
 	player = board[position]
@@ -119,7 +119,7 @@ def stage1Moves(board):
 def stage2Moves(board):
 	'''
 
-	@param board: current MorrisState
+	@param board: current list
 	'''
 	board_list = []
 	for i in range(len(board)):

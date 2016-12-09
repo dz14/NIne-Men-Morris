@@ -11,7 +11,7 @@ def numberOfPiecesHeuristic(board, isStage1):
 	moveablePiecesBlack = 0
 
 	if not isStage1:
-		movablePiecesBlack = len(addPiecesforMidgameAndEndGameBlack(board))
+		movablePiecesBlack = len(stage23Moves(board))
 
 	if not isStage1:
 		if numBlackPieces <= 2 or movablePiecesBlack == 0:
@@ -41,7 +41,7 @@ def potentialMillsHeuristic(board, isStage1):
 	moveablePiecesBlack = 0
 
 	if not isStage1:
-		movablePiecesBlack = len(addPiecesforMidgameAndEndGameBlack(board))
+		movablePiecesBlack = len(stage23Moves(board))
 
 	potentialMillsWhite = getPiecesInPotentialMillFormation(board, "1")
 	potentialMillsBlack = getPiecesInPotentialMillFormation(board, "2")
@@ -82,7 +82,7 @@ def numberOfMoveablePiecesHeuristic(board, isStage1):
 	moveablePiecesBlack = 0
 
 	if not isStage1:
-		movablePiecesBlack = len(addPiecesforMidgameAndEndGameBlack(board))
+		movablePiecesBlack = len(stage23Moves(board))
 
 	if not isStage1:
 		if numBlackPieces <= 2 or movablePiecesBlack == 0:
