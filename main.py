@@ -45,7 +45,7 @@ if __name__ == "__main__":
 		printBoard(board)
 		placePiece(board)
 
-		if getEvaluationForOpeningStage(board) == 100000:
+		if getEvaluationForOpeningPhase(board) == 100000:
 			print("Winner!")
 			exit(0)
 		

@@ -36,7 +36,7 @@ def adjacentLocations(position):
 	]
 	return adjacent[position]
 
-def checkMill(position, board, player):
+def checkMillFormation(position, board, player):
 	'''
 	Return True if there's a mill at position for player on given board
 	@param position: the index of the position we're checking
@@ -94,10 +94,10 @@ def isCloseMill(position, board):
 	'''
 
 	player = board[position]
-
+	print(player)
 	# if position is not empty
 	if (player != "X"):
-		
+		print("?")
 		return checkMillFormation(position, board, player)
 	
 	return False
@@ -184,7 +184,7 @@ def addPiecesForOpeningMovesBlack(board):
 	return generateInvertedBoardList(addPiecesforMidgameAndEndGame(invertedBoard))
 
 def addPiecesforMidgameAndEndGame(board):
-	if (getNumPieces(board, "1") == _END_GAME_PIECES):
+	if (getNumberOfPieces(board, "1") == _END_GAME_PIECES):
 		return addPiecesForHopping(board)
 	else:
 		return addPiecesForMidgame(board)
@@ -212,7 +212,7 @@ def getPossibleMillCount(board, player):
 
 	for i in range(len(board)):
 		if (board[i] == "X"):
-			if checkMill(i, board, player):
+			if checkMillFormation(i, board, player):
 				count += 1
 	return count
 
@@ -220,8 +220,8 @@ def getEvaluationForOpeningPhase(board):
 	'''
 	'''
 
-	numWhitePieces = getNumPieces(board, "1")
-	numBlackPieces = getNumPieces(board, "2")
+	numWhitePieces = getNumberOfPieces(board, "1")
+	numBlackPieces = getNumberOfPieces(board, "2")
 	mills = getPossibleMillCount(board, "1")
 
 	return numWhitePieces - numBlackPieces + mills
@@ -230,8 +230,8 @@ def getEvaluationStage23(board):
 	'''
 	'''
 	
-	numWhitePieces = getNumPieces(board, "1")
-	numBlackPieces = getNumPieces(board, "2")
+	numWhitePieces = getNumberOfPieces(board, "1")
+	numBlackPieces = getNumberOfPieces(board, "2")
 	mills = getPossibleMillCount(board, "1")
 
 	evaluation = 0
@@ -285,8 +285,8 @@ def getEvaluationImproved(board, isStage1):
 	'''
 	evaluation = 0
 
-	numWhitePieces = getNumPieces(board, "1")
-	numBlackPieces = getNumPieces(board, "2")
+	numWhitePieces = getNumberOfPieces(board, "1")
+	numBlackPieces = getNumberOfPieces(board, "2")
 
 	numPossibleMillsWhite = getPossibleMillCount(board, "1")
 	numPossibleMillsBlack = getPossibleMillCount(board, "2")
