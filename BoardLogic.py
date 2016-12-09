@@ -1,8 +1,6 @@
 from Utility import *
 import copy
 
-_END_GAME_PIECES = 3
-
 def adjacentLocations(position):
 	'''
 	Return pieces adjacent to the piece at position
@@ -101,7 +99,7 @@ def isCloseMill(position, board):
 	
 	return False
 
-def addPieces(board):
+def stage1Moves(board):
 	'''
 	'''
 	board_list = []
@@ -118,7 +116,7 @@ def addPieces(board):
 				board_list.append(board_clone)
 	return board_list
 
-def addPiecesForMidgame(board):
+def stage2Moves(board):
 	'''
 
 	@param board: current MorrisState
@@ -140,19 +138,7 @@ def addPiecesForMidgame(board):
 						board_list.append(board_clone)
 	return board_list
 
-def removePiece(board_clone, board_list):
-	'''
-	'''
-	for i in range(len(board_clone)):
-		if (board_clone[i] == "2"):
-
-			if not isCloseMill(i, board_clone):
-				new_board = copy.deepcopy(board_clone)
-				new_board[i] = "X"
-				board_list.append(new_board)
-	return board_list
-
-def addPiecesForHopping(board):
+def stage3Moves(board):
 	'''
 	'''
 	board_list = []
@@ -173,43 +159,23 @@ def addPiecesForHopping(board):
 						board_list.append(board_clone)
 	return board_list
 
-#not used
-def addPiecesForOpeningMoves(board):
-	return addPieces(board)
-
-#not used
-def addPiecesForOpeningMovesBlack(board):
-	invertedBoard = InvertedBoard(board)
-	midgame = addPiecesForOpeningMoves(invertedBoard)
-	invertedPieces = generateInvertedBoardList(midgame)
-	return invertedPieces
-
-def addPiecesforMidgameAndEndGame(board):
-	if (getNumberOfPieces(board, "1") == _END_GAME_PIECES):
-		return addPiecesForHopping(board)
+def stage23Moves(board):
+	if (numOfValue(board, "1") == 3):
+		return stage3Moves(board)
 	else:
-		return addPiecesForMidgame(board)
+		return stage2Moves(board)
 
-def addPiecesforMidgameAndEndGameBlack(board):
-	inverted = InvertedBoard(board)
-
-	return generateInvertedBoardList(addPiecesforMidgameAndEndGame(inverted))
-
-def addPiecesStage23AI(board):
+def removePiece(board_clone, board_list):
 	'''
 	'''
-	#differnt from original
-	invertedBoard = InvertedBoard(board)
+	for i in range(len(board_clone)):
+		if (board_clone[i] == "2"):
 
-	return generateInvertedBoardList(addPiecesforMidgameAndEndGame(invertedBoard))
-
-def generateInvertedBoardList(black_positions):
-	'''
-	'''
-	result = []
-	for i in black_positions:
-		result.append(InvertedBoard(i))
-	return result
+			if not isCloseMill(i, board_clone):
+				new_board = copy.deepcopy(board_clone)
+				new_board[i] = "X"
+				board_list.append(new_board)
+	return board_list
 
 def getPossibleMillCount(board, player):
 	'''
@@ -222,39 +188,26 @@ def getPossibleMillCount(board, player):
 				count += 1
 	return count
 
-def getEvaluationForOpeningPhase(board):
-	'''
-	'''
-
-	numWhitePieces = getNumberOfPieces(board, "1")
-	numBlackPieces = getNumberOfPieces(board, "2")
-	mills = getPossibleMillCount(board, "1")
-
-	return numWhitePieces - numBlackPieces + mills
-
 def getEvaluationStage23(board):
 	'''
 	'''
 	
-	numWhitePieces = getNumberOfPieces(board, "1")
-	numBlackPieces = getNumberOfPieces(board, "2")
+	numWhitePieces = numOfValue(board, "1")
+	numBlackPieces = numOfValue(board, "2")
 	mills = getPossibleMillCount(board, "1")
 
 	evaluation = 0
 
-	board_list = addPiecesforMidgameAndEndGame(board)
+	board_list = stage23Moves(board)
 
 	numBlackMoves = len(board_list)
 
-	if (numBlackPieces <= 2):
-		evaluation = 10000
-	elif numBlackPieces == 0:
-		evaluation = 10000
+	if numBlackPieces <= 2 or numBlackPieces == 0:
+		return float('inf')
 	elif numWhitePieces <= 2:
-		evaluation = -10000
+		return float('-inf')
 	else:
-		evaluation = (1000 * (numWhitePieces + mills - numBlackPieces) - numBlackMoves)
-	return evaluation
+		return 0
 
 def potentialMillInFormation(position, board, player):
 	'''

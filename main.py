@@ -8,7 +8,7 @@ beta = float('inf')
 depth = 3
 ai_depth = 4
 
-def printBoard(board):
+def boardOutput(board):
 		
 		print(board[0]+"(00)----------------------"+board[1]+"(01)----------------------"+board[2]+"(02)");
 		print("|                           |                           |");
@@ -41,11 +41,8 @@ def AI_VS_AI(heuristic1, heuristic2):
 	print("Stage 1")
 	for i in range(9):
 
-		#printBoard(board)
-		start = time.clock()
+		boardOutput(board)
 		evalBoard = minimax(board, ai_depth, True, alpha, beta, True, heuristic1)
-		end = time.clock()
-		print(str(getStatesReached()) + " states reached! in time " + str(end-start))
 
 		if evalBoard.evaluator == float('inf'):
 			print("AI Bot 1 has won!")
@@ -53,7 +50,7 @@ def AI_VS_AI(heuristic1, heuristic2):
 		else:
 			board = evalBoard.board
 		
-		#printBoard(board)
+		boardOutput(board)
 		evalBoard = alphaBetaPruning(board, ai_depth, False, alpha, beta, True, heuristic2)
 		
 		if evalBoard.evaluator == float('-inf'):
@@ -65,11 +62,8 @@ def AI_VS_AI(heuristic1, heuristic2):
 	print("Stage 2")
 	while True:
 
-		#printBoard(board)
-		start = time.clock()
-		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, False, heuristic1)
-		end = time.clock()
-		print(str(getPruned()) + " states pruned and " + str(getStatesReached()) + " states reached! in time " + str(end-start))
+		boardOutput(board)
+		evalBoard = minimax(board, ai_depth, True, alpha, beta, False, heuristic1)
 
 		if evalBoard.evaluator == float('inf'):
 			print("AI Bot 1 has won!")
@@ -77,11 +71,11 @@ def AI_VS_AI(heuristic1, heuristic2):
 		else:
 			board = evalBoard.board
 
-		#printBoard(board)
+		boardOutput(board)
 		evaluation = alphaBetaPruning(board, ai_depth, False, alpha, beta, False, heuristic2)
 
 		if evaluation.evaluator == float('-inf'):
-			print("You Lost")
+			print("AI Bot 2 has won")
 			exit(0)
 		else:
 			board = evaluation.board
@@ -97,12 +91,12 @@ def HUMAN_VS_AI(heuristic_stage1, heuristic_stage23):
 		
 	for i in range(9):
 
-		printBoard(board)
+		boardOutput(board)
 		finished = False
 		while not finished:
 			try:
 
-				pos = int(input("\nWhere do you want to place the WHITE piece?"))	
+				pos = int(input("\nPlace '1' piece: "))	
 				
 				if board[pos] == "X":
 					
@@ -112,7 +106,7 @@ def HUMAN_VS_AI(heuristic_stage1, heuristic_stage23):
 						while not itemPlaced:
 							try:
 
-								pos = int(input("\nWhich black piece do you want to remove?"))
+								pos = int(input("\nRemove '2' piece: "))
 								
 								if board[pos] == "2" and not isCloseMill(pos, board) or (isCloseMill(pos, board) and getNumberOfPieces(board, "1") == 3):
 									board[pos] = "X"
@@ -129,14 +123,9 @@ def HUMAN_VS_AI(heuristic_stage1, heuristic_stage23):
 					print("There is already a piece there")
 
 			except Exception:
-				print("Error getting the value")
-
-
-		if getEvaluationForOpeningPhase(board) == float('inf'):
-			print("Winner!")
-			exit(0)
+				print("Couldn't get the input value")
 		
-		printBoard(board)
+		boardOutput(board)
 		evalBoard = alphaBetaPruning(board, depth, False, alpha, beta, True, heuristic_stage1)
 
 		if evalBoard.evaluator == float('-inf'):
@@ -148,27 +137,25 @@ def HUMAN_VS_AI(heuristic_stage1, heuristic_stage23):
 	endStagesFinished = False
 	while not endStagesFinished:
 
-		printBoard(board)
+		boardOutput(board)
 		
 		#Get the users next move
 		userHasMoved = False
-		while not usersHasMoved:
+		while not userHasMoved:
 			try:
-				pos = int(input("\nWhich WHITE piece do you want to move?: "))
+				pos = int(input("\nMove '1' piece: "))
 
 				while board[pos] != '1':
-					pos = int(input("\nWhich WHITE piece do you want to move?: ")) 
+					pos = int(input("\nMove '1' piece: ")) 
 
 				userHasPlaced = False
 				while not userHasPlaced:
 
-					newPos = int(input("Where do you want to place the white piece?"))
+					newPos = int(input("'1' New Location: "))
 
 					if board[newPos] == "X":
 						board[pos] = 'X'
 						board[newPos] = '1'
-
-						print("\nWhite moved")
 
 						if isCloseMill(newPos, board):
 							
@@ -176,14 +163,13 @@ def HUMAN_VS_AI(heuristic_stage1, heuristic_stage23):
 							while not userHasRemoved:
 								try:
 
-									pos = int(input("\nWhich black piece do you want to remove?"))
+									pos = int(input("\nRemove '2' piece: "))
 									
 									if board[pos] == "2" and not isCloseMill(pos, board) or (isCloseMill(pos, board) and getNumberOfPieces(board, "1") == 3):
 										board[pos] = "X"
 										userHasRemoved = True
 									else:
 										print("Invalid position")
-										continue
 								except Exception:
 									print("Error while accepting input")
 
@@ -200,7 +186,7 @@ def HUMAN_VS_AI(heuristic_stage1, heuristic_stage23):
 			print("You Win!")
 			exit(0)
 
-		printBoard(board)
+		boardOutput(board)
 
 		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, False, heuristic_stage23)
 
@@ -215,6 +201,8 @@ if __name__ == "__main__":
 	
 	print("Welcome to Nine Mens Morris")
 	print("==========================")
+	print("1. Is Human vs AI")
+	print("2. Is AI vs AI")
 	gametype = input("Please enter 1 or 2: ")
 
 	while gametype != "1" and gametype != "2":
@@ -223,7 +211,7 @@ if __name__ == "__main__":
 	if gametype == "1":
 		HUMAN_VS_AI(numberOfPiecesHeuristic, AdvancedHeuristic)
 	elif gametype == "2":
-		AI_VS_AI(AdvancedHeuristic, AdvancedHeuristic)
+		AI_VS_AI(numberOfMoveablePiecesHeuristic, AdvancedHeuristic)
 
 	
 
