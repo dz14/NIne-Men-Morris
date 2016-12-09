@@ -5,23 +5,23 @@ def numberOfPiecesHeuristic(board, isStage1):
 	Heuristic that looks at the number of pieces on the board
 	'''
 	
-	numWhitePieces = numOfValue(board, "1")
-	numBlackPieces = numOfValue(board, "2")
+	numPlayerOneTokens = numOfValue(board, "1")
+	numPlayerTwoTokens = numOfValue(board, "2")
 
-	moveablePiecesBlack = 0
+	moveablePiecesPlayer2 = 0
 
 	if not isStage1:
 		movablePiecesBlack = len(stage23Moves(board))
 
 	if not isStage1:
-		if numBlackPieces <= 2 or movablePiecesBlack == 0:
+		if numPlayerTwoTokens <= 2 or movablePiecesBlack == 0:
 			evaluation = float('inf')
-		elif numWhitePieces <= 2:
+		elif numPlayerOneTokens <= 2:
 			evaluation = float('-inf')
 		else:
-			evaluation = 200 * (numWhitePieces - numBlackPieces)
+			evaluation = 200 * (numPlayerOneTokens - numPlayerTwoTokens)
 	else:
-		evaluation = 100 * (numWhitePieces - numBlackPieces)
+		evaluation = 100 * (numPlayerOneTokens - numPlayerTwoTokens)
 
 	return evaluation
 
@@ -32,39 +32,39 @@ def potentialMillsHeuristic(board, isStage1):
 
 	evaluation = 0
 
-	numWhitePieces = numOfValue(board, "1")
-	numBlackPieces = numOfValue(board, "2")
+	numPlayerOneTokens = numOfValue(board, "1")
+	numPlayerTwoTokens = numOfValue(board, "2")
 
-	numPossibleMillsWhite = getPossibleMillCount(board, "1")
-	numPossibleMillsBlack = getPossibleMillCount(board, "2")
+	numPossibleMillsPlayer1 = getPossibleMillCount(board, "1")
+	numPossibleMillsPlayer2 = getPossibleMillCount(board, "2")
 
-	moveablePiecesBlack = 0
+	moveablePiecesPlayer2 = 0
 
 	if not isStage1:
 		movablePiecesBlack = len(stage23Moves(board))
 
-	potentialMillsWhite = getPiecesInPotentialMillFormation(board, "1")
-	potentialMillsBlack = getPiecesInPotentialMillFormation(board, "2")
+	potentialMillsPlayer1 = getPiecesInPotentialMillFormation(board, "1")
+	potentialMillsPlayer2 = getPiecesInPotentialMillFormation(board, "2")
 
 	if not isStage1:
-		if numBlackPieces <= 2 or movablePiecesBlack == 0:
+		if numPlayerTwoTokens <= 2 or movablePiecesBlack == 0:
 			evaluation = float('inf')
-		elif numWhitePieces <= 2:
+		elif numPlayerOneTokens <= 2:
 			evaluation = float('-inf')
 		else:
-			if (numWhitePieces < 4):
-				evaluation += 100 * numPossibleMillsWhite
-				evaluation += 200 * potentialMillsBlack
+			if (numPlayerOneTokens < 4):
+				evaluation += 100 * numPossibleMillsPlayer1
+				evaluation += 200 * potentialMillsPlayer2
 			else:
-				evaluation += 200 * numPossibleMillsWhite
-				evaluation += 100 * potentialMillsBlack
+				evaluation += 200 * numPossibleMillsPlayer1
+				evaluation += 100 * potentialMillsPlayer2
 	else:
-		if numWhitePieces < 4:
-			evaluation += 100 * numPossibleMillsWhite
-			evaluation += 200 * potentialMillsBlack
+		if numPlayerOneTokens < 4:
+			evaluation += 100 * numPossibleMillsPlayer1
+			evaluation += 200 * potentialMillsPlayer2
 		else:
-			evaluation += 200 * numPossibleMillsWhite
-			evaluation += 100 * potentialMillsBlack
+			evaluation += 200 * numPossibleMillsPlayer1
+			evaluation += 100 * potentialMillsPlayer2
 
 	return evaluation
 
@@ -75,26 +75,26 @@ def numberOfMoveablePiecesHeuristic(board, isStage1):
 	
 	evaluation = 0
 
-	numWhitePieces = numOfValue(board, "1")
-	numBlackPieces = numOfValue(board, "2")
+	numPlayerOneTokens = numOfValue(board, "1")
+	numPlayerTwoTokens = numOfValue(board, "2")
 
-	moveablePiecesWhite = 0
-	moveablePiecesBlack = 0
+	moveablePiecesPlayer1 = 0
+	moveablePiecesPlayer2 = 0
 
 	if not isStage1:
 		movablePiecesBlack = len(stage23Moves(board))
 
 	if not isStage1:
-		if numBlackPieces <= 2 or movablePiecesBlack == 0:
+		if numPlayerTwoTokens <= 2 or movablePiecesBlack == 0:
 			evaluation = float('inf')
-		elif numWhitePieces <= 2:
+		elif numPlayerOneTokens <= 2:
 			evaluation = float('-inf')
 		else:
-			evaluation = 100 * (numWhitePieces - numBlackPieces)
+			evaluation = 100 * (numPlayerOneTokens - numPlayerTwoTokens)
 			evaluation -= 50 * movablePiecesBlack
 	else:
-		evaluation = 100 * (numWhitePieces - numBlackPieces)
-		evaluation -= 50 * moveablePiecesBlack
+		evaluation = 100 * (numPlayerOneTokens - numPlayerTwoTokens)
+		evaluation -= 50 * moveablePiecesPlayer2
 
 	return evaluation
 
@@ -107,43 +107,43 @@ def AdvancedHeuristic(board, isStage1):
 
 	evaluation = 0
 
-	numWhitePieces = numOfValue(board, "1")
-	numBlackPieces = numOfValue(board, "2")
+	numPlayerOneTokens = numOfValue(board, "1")
+	numPlayerTwoTokens = numOfValue(board, "2")
 
-	numPossibleMillsWhite = getPossibleMillCount(board, "1")
-	numPossibleMillsBlack = getPossibleMillCount(board, "2")
+	numPossibleMillsPlayer1 = getPossibleMillCount(board, "1")
+	numPossibleMillsPlayer2 = getPossibleMillCount(board, "2")
 
-	moveablePiecesWhite = 0
-	moveablePiecesBlack = 0
+	moveablePiecesPlayer1 = 0
+	moveablePiecesPlayer2 = 0
 
 	if not isStage1:
 		movablePiecesBlack = len(stage23Moves(board))
 
-	potentialMillsWhite = getPiecesInPotentialMillFormation(board, "1")
-	potentialMillsBlack = getPiecesInPotentialMillFormation(board, "2")
+	potentialMillsPlayer1 = getPiecesInPotentialMillFormation(board, "1")
+	potentialMillsPlayer2 = getPiecesInPotentialMillFormation(board, "2")
 
 	if not isStage1:
-		if numBlackPieces <= 2 or movablePiecesBlack == 0:
+		if numPlayerTwoTokens <= 2 or movablePiecesBlack == 0:
 			evaluation = float('inf')
-		elif numWhitePieces <= 2:
+		elif numPlayerOneTokens <= 2:
 			evaluation = float('-inf')
 		else:
-			if (numWhitePieces < 4):
-				evaluation += 100 * numPossibleMillsWhite
-				evaluation += 200 * potentialMillsBlack
+			if (numPlayerOneTokens < 4):
+				evaluation += 100 * numPossibleMillsPlayer1
+				evaluation += 200 * potentialMillsPlayer2
 			else:
-				evaluation += 200 * numPossibleMillsWhite
-				evaluation += 100 * potentialMillsBlack
+				evaluation += 200 * numPossibleMillsPlayer1
+				evaluation += 100 * potentialMillsPlayer2
 			evaluation -= 25 * movablePiecesBlack
-			evaluation += 50 * (numWhitePieces - numBlackPieces)
+			evaluation += 50 * (numPlayerOneTokens - numPlayerTwoTokens)
 	else:
-		if numWhitePieces < 4:
-			evaluation += 100 * numPossibleMillsWhite
-			evaluation += 200 * potentialMillsBlack
+		if numPlayerOneTokens < 4:
+			evaluation += 100 * numPossibleMillsPlayer1
+			evaluation += 200 * potentialMillsPlayer2
 		else:
-			evaluation += 200 * numPossibleMillsWhite
-			evaluation += 100 * potentialMillsBlack
-		evaluation -= 25 * moveablePiecesBlack
-		evaluation += 50 * (numWhitePieces - numBlackPieces)
+			evaluation += 200 * numPossibleMillsPlayer1
+			evaluation += 100 * potentialMillsPlayer2
+		evaluation -= 25 * moveablePiecesPlayer2
+		evaluation += 50 * (numPlayerOneTokens - numPlayerTwoTokens)
 
 	return evaluation
