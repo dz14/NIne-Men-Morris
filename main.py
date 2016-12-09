@@ -51,12 +51,12 @@ if __name__ == "__main__":
 		
 		printBoard(board)
 		evalBoard = alphaBetaPruning(board, depth, False, alpha, beta, True)
-
-		if evaluation.evaluator == -100000:
+		print(evalBoard.board)
+		if evalBoard.evaluator == -100000:
 			print("You Lost")
 			exit(0)
 		else:
-			board = evaluation.board
+			board = evalBoard.board
 
 	while True:
 

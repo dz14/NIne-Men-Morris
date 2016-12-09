@@ -9,7 +9,6 @@ def placePiece(board):
 			
 			if board[pos] == "X":
 				board[pos] = '1'
-				print("?")
 				if isCloseMill(pos, board):
 					board = removePiece(board)
 				return True

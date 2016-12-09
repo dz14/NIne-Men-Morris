@@ -6,7 +6,6 @@ def alphaBetaPruning(board, depth, isWhite, alpha, beta, isOpeningPhase):
 	finalEvaluation = evaluator(board)
 
 	if depth != 0:
-		possibleBoardConfigurations = None
 		currentEvaluation = evaluator(board)
 
 		if isWhite:
@@ -57,12 +56,16 @@ def alphaBetaPruning(board, depth, isWhite, alpha, beta, isOpeningPhase):
 	else:
 
 		if isWhite:
-			finalEvaluation.evaluator = getEvaluationImproved(board, opening)
+			finalEvaluation.evaluator = getEvaluationImproved(board, isOpeningPhase)
+			print(getEvaluationImproved(board, isOpeningPhase))
 		else:
-			finalEvaluation.evaluator = getEvaluationImproved(InvertedBoard(board), opening)
+			finalEvaluation.evaluator = getEvaluationImproved(InvertedBoard(board), isOpeningPhase)
+			print(getEvaluationImproved(InvertedBoard(board), isOpeningPhase))
 
 		finalEvaluation.positions += 1
-	
+
+
+
 	return finalEvaluation
 
 						

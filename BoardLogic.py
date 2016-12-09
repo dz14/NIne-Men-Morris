@@ -94,10 +94,9 @@ def isCloseMill(position, board):
 	'''
 
 	player = board[position]
-	print(player)
+
 	# if position is not empty
 	if (player != "X"):
-		print("?")
 		return checkMillFormation(position, board, player)
 	
 	return False
@@ -181,7 +180,9 @@ def addPiecesForOpeningMoves(board):
 #not used
 def addPiecesForOpeningMovesBlack(board):
 	invertedBoard = InvertedBoard(board)
-	return generateInvertedBoardList(addPiecesforMidgameAndEndGame(invertedBoard))
+	midgame = addPiecesForOpeningMoves(invertedBoard)
+	invertedPieces = generateInvertedBoardList(midgame)
+	return invertedPieces
 
 def addPiecesforMidgameAndEndGame(board):
 	if (getNumberOfPieces(board, "1") == _END_GAME_PIECES):
