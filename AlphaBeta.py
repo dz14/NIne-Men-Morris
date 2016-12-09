@@ -32,7 +32,6 @@ def alphaBetaPruning(board, depth, isWhite, alpha, beta, isOpeningPhase):
 
 				if currentEvaluation.evaluator > alpha:
 					alpha = currentEvaluation.evaluator
-
 					finalEvaluation.board = move
 			else:
 
@@ -42,27 +41,24 @@ def alphaBetaPruning(board, depth, isWhite, alpha, beta, isOpeningPhase):
 				
 				if currentEvaluation.evaluator < beta:
 					beta = currentEvaluation.evaluator
-
 					finalEvaluation.board = move
 
 			if alpha >= beta:
 				break
 
 		if isWhite:
-			finalEvaluation.evaluation = alpha
+			finalEvaluation.evaluator = alpha
 		else:
-			finalEvaluation.evaluation = beta
+			finalEvaluation.evaluator = beta
 
 	else:
 
 		if isWhite:
 			finalEvaluation.evaluator = getEvaluationImproved(board, isOpeningPhase)
-			print(getEvaluationImproved(board, isOpeningPhase))
 		else:
 			finalEvaluation.evaluator = getEvaluationImproved(InvertedBoard(board), isOpeningPhase)
-			print(getEvaluationImproved(InvertedBoard(board), isOpeningPhase))
 
-		finalEvaluation.positions += 1
+		finalEvaluation.positions = finalEvaluation.positions + 1
 
 
 

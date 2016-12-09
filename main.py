@@ -40,6 +40,7 @@ if __name__ == "__main__":
 
 	evaluation = evaluator(board)
 		
+	
 	for i in range(9):
 
 		printBoard(board)
