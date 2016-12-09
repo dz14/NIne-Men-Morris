@@ -5,12 +5,9 @@ def numberOfPiecesHeuristic(board, isStage1):
 	Heuristic that looks at the number of pieces on the board
 	'''
 	
-	evaluation = 0
+	numWhitePieces = numOfValue(board, "1")
+	numBlackPieces = numOfValue(board, "2")
 
-	numWhitePieces = getNumberOfPieces(board, "1")
-	numBlackPieces = getNumberOfPieces(board, "2")
-
-	moveablePiecesWhite = 0
 	moveablePiecesBlack = 0
 
 	if not isStage1:
@@ -22,7 +19,7 @@ def numberOfPiecesHeuristic(board, isStage1):
 		elif numWhitePieces <= 2:
 			evaluation = float('-inf')
 		else:
-			evaluation = 100 * (numWhitePieces - numBlackPieces)
+			evaluation = 200 * (numWhitePieces - numBlackPieces)
 	else:
 		evaluation = 100 * (numWhitePieces - numBlackPieces)
 
@@ -35,8 +32,8 @@ def potentialMillsHeuristic(board, isStage1):
 
 	evaluation = 0
 
-	numWhitePieces = getNumberOfPieces(board, "1")
-	numBlackPieces = getNumberOfPieces(board, "2")
+	numWhitePieces = numOfValue(board, "1")
+	numBlackPieces = numOfValue(board, "2")
 
 	numPossibleMillsWhite = getPossibleMillCount(board, "1")
 	numPossibleMillsBlack = getPossibleMillCount(board, "2")
@@ -78,8 +75,8 @@ def numberOfMoveablePiecesHeuristic(board, isStage1):
 	
 	evaluation = 0
 
-	numWhitePieces = getNumberOfPieces(board, "1")
-	numBlackPieces = getNumberOfPieces(board, "2")
+	numWhitePieces = numOfValue(board, "1")
+	numBlackPieces = numOfValue(board, "2")
 
 	moveablePiecesWhite = 0
 	moveablePiecesBlack = 0
@@ -110,8 +107,8 @@ def AdvancedHeuristic(board, isStage1):
 
 	evaluation = 0
 
-	numWhitePieces = getNumberOfPieces(board, "1")
-	numBlackPieces = getNumberOfPieces(board, "2")
+	numWhitePieces = numOfValue(board, "1")
+	numBlackPieces = numOfValue(board, "2")
 
 	numPossibleMillsWhite = getPossibleMillCount(board, "1")
 	numPossibleMillsBlack = getPossibleMillCount(board, "2")
@@ -120,7 +117,7 @@ def AdvancedHeuristic(board, isStage1):
 	moveablePiecesBlack = 0
 
 	if not isStage1:
-		movablePiecesBlack = len(addPiecesforMidgameAndEndGameBlack(board))
+		movablePiecesBlack = len(stage23Moves(board))
 
 	potentialMillsWhite = getPiecesInPotentialMillFormation(board, "1")
 	potentialMillsBlack = getPiecesInPotentialMillFormation(board, "2")
@@ -131,7 +128,6 @@ def AdvancedHeuristic(board, isStage1):
 		elif numWhitePieces <= 2:
 			evaluation = float('-inf')
 		else:
-			evaluation = 50 * (numWhitePieces - numBlackPieces)
 			if (numWhitePieces < 4):
 				evaluation += 100 * numPossibleMillsWhite
 				evaluation += 200 * potentialMillsBlack
@@ -139,8 +135,8 @@ def AdvancedHeuristic(board, isStage1):
 				evaluation += 200 * numPossibleMillsWhite
 				evaluation += 100 * potentialMillsBlack
 			evaluation -= 25 * movablePiecesBlack
+			evaluation += 50 * (numWhitePieces - numBlackPieces)
 	else:
-		evaluation = 50 * (numWhitePieces - numBlackPieces)
 		if numWhitePieces < 4:
 			evaluation += 100 * numPossibleMillsWhite
 			evaluation += 200 * potentialMillsBlack
@@ -148,5 +144,6 @@ def AdvancedHeuristic(board, isStage1):
 			evaluation += 200 * numPossibleMillsWhite
 			evaluation += 100 * potentialMillsBlack
 		evaluation -= 25 * moveablePiecesBlack
+		evaluation += 50 * (numWhitePieces - numBlackPieces)
 
 	return evaluation

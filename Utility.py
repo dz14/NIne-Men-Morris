@@ -1,6 +1,6 @@
 import copy
 
-def getNumberOfPieces(board, value):
+def numOfValue(board, value):
     return board.count(value)
 
 def InvertedBoard(board):
@@ -13,3 +13,11 @@ def InvertedBoard(board):
         else:
             invertedboard.append("X")
     return invertedboard
+
+def generateInvertedBoardList(pos_list):
+    '''
+    '''
+    result = []
+    for i in pos_list:
+        result.append(InvertedBoard(i))
+    return result

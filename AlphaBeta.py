@@ -1,13 +1,8 @@
 from BoardLogic import *
 from Utility import *
 
-
 pruned = 0
 states_reached = 0
-
-
-
-
 
 class evaluator():
  	
@@ -28,16 +23,16 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, isStage1, heuristic):
 		if player1:
 
 			if isStage1:
-				possible_configs = addPiecesForOpeningMoves(board)
+				possible_configs = stage1Moves(board)
 			else:
-				possible_configs = addPiecesforMidgameAndEndGame(board)
+				possible_configs = stage23Moves(board)
 		
 		else:
 			
 			if isStage1:
-				possible_configs = addPiecesForOpeningMovesBlack(board)
+				possible_configs = generateInvertedBoardList(stage1Moves(InvertedBoard(board)))
 			else:
-				possible_configs = addPiecesforMidgameAndEndGameBlack(board)
+				possible_configs = generateInvertedBoardList(stage23Moves(InvertedBoard(board)))
 
 		for move in possible_configs:
 
@@ -87,16 +82,16 @@ def minimax(board, depth, player1, alpha, beta, isStage1, heuristic):
 		if player1:
 
 			if isStage1:
-				possible_configs = addPiecesForOpeningMoves(board)
+				possible_configs = stage1Moves(board)
 			else:
-				possible_configs = addPiecesforMidgameAndEndGame(board)
+				possible_configs = stage23Moves(board)
 		
 		else:
 			
 			if isStage1:
-				possible_configs = addPiecesForOpeningMovesBlack(board)
+				possible_configs = generateInvertedBoardList(stage1Moves(InvertedBoard(board)))
 			else:
-				possible_configs = addPiecesforMidgameAndEndGameBlack(board)
+				possible_configs = generateInvertedBoardList(stage23Moves(InvertedBoard(board)))
 
 		for move in possible_configs:
 
