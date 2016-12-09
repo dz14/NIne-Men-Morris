@@ -1,9 +1,9 @@
-from MorrisState import *
+from Utility import *
 import copy
 
 _END_GAME_PIECES = 3
 
-def adjacentPositions(position):
+def adjacentLocations(position):
 	'''
 	Return pieces adjacent to the piece at position
 	@param position: index of the piece
@@ -36,22 +36,7 @@ def adjacentPositions(position):
 	]
 	return adjacent[position]
 
-
-def isMill(player, board, pos1, pos2):
-	'''
-	Return True if pos1 and pos2 on board both belong to player
-	@param player: string representation of the board piece color
-	@param board: current MorrisState
-	@param pos1: first position index
-	@param pos2: second position index
-	'''
-
-	if (board[pos1] == player and board[pos2] == player):
-		return True
-	return False
-
-
-def checkMill(position, board, player):
+def checkMillFormation(position, board, player):
 	'''
 	Return True if there's a mill at position for player on given board
 	@param position: the index of the position we're checking
@@ -88,8 +73,20 @@ def checkMill(position, board, player):
 
 	return mill[position]
 
+def isMill(player, board, pos1, pos2):
+	'''
+	Return True if pos1 and pos2 on board both belong to player
+	@param player: string representation of the board piece color
+	@param board: current MorrisState
+	@param pos1: first position index
+	@param pos2: second position index
+	'''
 
-def hasMill(position, board):
+	if (board[pos1] == player and board[pos2] == player):
+		return True
+	return False
+
+def isCloseMill(position, board):
 	'''
 	Return True if any player has a mill on position
 	@param position: the index of the position we're checking
@@ -100,8 +97,7 @@ def hasMill(position, board):
 
 	# if position is not empty
 	if (player != "X"):
-		
-		return checkMill(position, board, player)
+		return checkMillFormation(position, board, player)
 	
 	return False
 
@@ -114,242 +110,227 @@ def addPieces(board):
 		# fill empty positions with white
 		if (board[i] == "X"):
 			board_clone = copy.deepcopy(board)
-			board_clone[i] = "2"
+			board_clone[i] = "1"
 
-			if (hasMill(i, board_clone)):
+			if (isCloseMill(i, board_clone)):
 				board_list = removePiece(board_clone, board_list)
 			else:
 				board_list.append(board_clone)
 	return board_list
 
-
-def removePiece(board_clone, board_list):
-	'''
-	'''
-	for i in range(len(board_clone)):
-		if (board_clone[i] == "1"):
-
-			if not hasMill(i, board_clone):
-				new_board = copy.deepcopy(board_clone)
-				new_board[i] = "X"
-				board_list.append(new_board)
-	return board_list
-
-
-def addPiecesStage2(board):
+def addPiecesForMidgame(board):
 	'''
 
 	@param board: current MorrisState
 	'''
 	board_list = []
 	for i in range(len(board)):
-		if (board[i] == "2"):
-			adjacent_list = adjacentPositions(i)
+		if (board[i] == "1"):
+			adjacent_list = adjacentLocations(i)
 
 			for pos in adjacent_list:
 				if (board[pos] == "X"):
 					board_clone = copy.deepcopy(board)
 					board_clone[i] = "X"
-					board_clone[pos] = "2"
+					board_clone[pos] = "1"
 
-					if isMill(pos, board_clone):
+					if isCloseMill(pos, board_clone):
 						board_list = removePiece(board_clone, board_list)
 					else:
 						board_list.append(board_clone)
 	return board_list
 
+def removePiece(board_clone, board_list):
+	'''
+	'''
+	for i in range(len(board_clone)):
+		if (board_clone[i] == "2"):
 
-def addPiecesStage3(board):
+			if not isCloseMill(i, board_clone):
+				new_board = copy.deepcopy(board_clone)
+				new_board[i] = "X"
+				board_list.append(new_board)
+	return board_list
+
+def addPiecesForHopping(board):
 	'''
 	'''
 	board_list = []
 
 	for i in range(len(board)):
-		if (board[i] == "2"):
+		if (board[i] == "1"):
 
 			for j in range(len(board)):
 				if (board[j] == "X"):
 					board_clone = copy.deepcopy(board)
 
 					board_clone[i] = "X"
-					board_clone[j] = "2"
+					board_clone[j] = "1"
 
-					if (isMill(j, board_clone)):
+					if (isCloseMill(j, board_clone)):
 						board_list = removePiece(board_clone, board_list)
 					else:
 						board_list.append(board_clone)
 	return board_list
 
-
-def addPiecesStage1(board):
-	'''
-	'''
+#not used
+def addPiecesForOpeningMoves(board):
 	return addPieces(board)
 
+#not used
+def addPiecesForOpeningMovesBlack(board):
+	invertedBoard = InvertedBoard(board)
+	midgame = addPiecesForOpeningMoves(invertedBoard)
+	invertedPieces = generateInvertedBoardList(midgame)
+	return invertedPieces
 
-def addPiecesStage1Player1(board):
-	'''
-	'''
-	inv_board = InvertedBoard(board)
-
-	positions = addPiecesStage1(inv_board)
-	possible_moves = generateInvertedBoards(positions)
-
-	return possible_moves
-
-
-def addPiecesStage23(board):
-	if (getNumPieces(board, "2") == _END_GAME_PIECES):
-		return addPiecesStage3(board)
+def addPiecesforMidgameAndEndGame(board):
+	if (getNumberOfPieces(board, "1") == _END_GAME_PIECES):
+		return addPiecesForHopping(board)
 	else:
-		addPiecesStage2(board)
+		return addPiecesForMidgame(board)
 
+def addPiecesforMidgameAndEndGameBlack(board):
+	inverted = InvertedBoard(board)
 
-def addPiecesStage23Player1(board):
+	return generateInvertedBoardList(addPiecesforMidgameAndEndGame(inverted))
+
+def addPiecesStage23AI(board):
 	'''
 	'''
-	inv_Board = board.InvertedBoard()
+	#differnt from original
+	invertedBoard = InvertedBoard(board)
 
-	return generateInvertedBoards(addPiecesStage23(inv_board))
+	return generateInvertedBoardList(addPiecesforMidgameAndEndGame(invertedBoard))
 
-
-def generateInvertedBoards(black_positions):
+def generateInvertedBoardList(black_positions):
 	'''
 	'''
 	result = []
 	for i in black_positions:
-		
 		result.append(InvertedBoard(i))
-
 	return result
 
-
-def getPossibleMills(board, player):
+def getPossibleMillCount(board, player):
 	'''
 	'''
-	mills = 0
+	count = 0
 
 	for i in range(len(board)):
 		if (board[i] == "X"):
-			if checkMill(i, board, player):
-				mills += 1
-	return mills
+			if checkMillFormation(i, board, player):
+				count += 1
+	return count
 
-
-def getEvaluationStage1(board):
+def getEvaluationForOpeningPhase(board):
 	'''
 	'''
 
-	pieces1 = getNumPieces(board, "1")
-	pieces2 = getNumPieces(board, "1")
-	mills = getPossibleMills(board, "2")
+	numWhitePieces = getNumberOfPieces(board, "1")
+	numBlackPieces = getNumberOfPieces(board, "2")
+	mills = getPossibleMillCount(board, "1")
 
-	return pieces2 - pieces1 + mills
-
+	return numWhitePieces - numBlackPieces + mills
 
 def getEvaluationStage23(board):
 	'''
 	'''
-	pieces1 = getNumPieces(board, "1")
-	pieces2 = getNumPieces(board, "1")
-	mills = getPossibleMills(board, "2")
+	
+	numWhitePieces = getNumberOfPieces(board, "1")
+	numBlackPieces = getNumberOfPieces(board, "2")
+	mills = getPossibleMillCount(board, "1")
 
 	evaluation = 0
 
-	board_list = addPiecesStage23(board)
+	board_list = addPiecesforMidgameAndEndGame(board)
 
-	moves1 = len(board_list)
+	numBlackMoves = len(board_list)
 
-	if (pieces1 <= 2):
+	if (numBlackPieces <= 2):
 		evaluation = 10000
-	elif moves1 == 0:
+	elif numBlackPieces == 0:
 		evaluation = 10000
-	elif pieces2 <= 2:
+	elif numWhitePieces <= 2:
 		evaluation = -10000
 	else:
-		evaluation = (1000 * (pieces2 + mills - pieces1) - moves1)
+		evaluation = (1000 * (numWhitePieces + mills - numBlackPieces) - numBlackMoves)
 	return evaluation
 
-
-def potentialMill(position, board, player):
+def potentialMillInFormation(position, board, player):
 	'''
 	'''
-	adjacent_list = adjacentPositions(position)
+	adjacent_list = adjacentLocations(position)
 
 	for i in adjacent_list:
-		if (board[i] == player) \
-			and (not checkMill(position, board, player)):
+		if (board[i] == player) and (not checkMillFormation(position, board, player)):
 			return True
 	return False
 
-
-def getPiecesInPotentialMill(board, player):
+def getPiecesInPotentialMillFormation(board, player):
 	'''
 	'''
 	count = 0
 
 	for i in range(len(board)):
 		if (board[i] == player):
-			adjacent_list = adjacentPositions(i)
+			adjacent_list = adjacentLocations(i)
 			for pos in adjacent_list:
-				if (player == "2"):
-					if (board[pos] == "1"):
-						board[i] = "1"
-						if hasMill(i, board):
+				if (player == "1"):
+					if (board[pos] == "2"):
+						board[i] = "2"
+						if isCloseMill(i, board):
 							count += 1
 						board[i] = player
 				else:
-					if (board[pos] == "2" \
-						and potentialMill(pos, board, "2")):
+					if (board[pos] == "1" and potentialMillInFormation(pos, board, "1")):
 						count += 1
 	return count
-
 
 def getEvaluationImproved(board, isStage1):
 	'''
 	'''
 	evaluation = 0
 
-	pieces1 = getNumPieces(board, "1")
-	pieces2 = getNumPieces(board, "2")
+	numWhitePieces = getNumberOfPieces(board, "1")
+	numBlackPieces = getNumberOfPieces(board, "2")
 
-	possible_mills1 = getPossibleMills(board, "1")
-	possible_mills2 = getPossibleMills(board, "2")
+	numPossibleMillsWhite = getPossibleMillCount(board, "1")
+	numPossibleMillsBlack = getPossibleMillCount(board, "2")
 
-	moves1 = 0
-	moves2 = 0
-
-	if (not isStage1):
-		board_list1 = addPiecesStage23Player1(board)
-
-		moves1 = len(board_list1)
-
-	potential_mills1 = getPiecesInPotentialMill(board, "1")
-	potential_mills2 = getPiecesInPotentialMill(board, "2")
+	moveablePiecesWhite = 0
+	moveablePiecesBlack = 0
 
 	if (not isStage1):
-		if pieces1 <= 2:
+		board_list1 = addPiecesforMidgameAndEndGameBlack(board)
+
+		movablePiecesBlack = len(board_list1)
+
+	potentialMillsWhite = getPiecesInPotentialMillFormation(board, "1")
+	potentialMillsBlack = getPiecesInPotentialMillFormation(board, "2")
+
+	if (not isStage1):
+		if numBlackPieces <= 2:
 			evaluation = 100000
-		elif (moves1 == 0):
+		elif (movablePiecesBlack == 0):
 			evaluation = 100000
-		elif (pieces2 <= 2):
+		elif (numWhitePieces <= 2):
 			evaluation = -100000
 		else:
-			evaluation = 100 * (pieces2 - pieces1)
-			if (pieces2 < 4):
-				evaluation += 500 * possible_mills2
-				evaluation += 1000 * potential_mills1
+			evaluation = 100 * (numWhitePieces - numBlackPieces)
+			if (numWhitePieces < 4):
+				evaluation += 500 * numPossibleMillsWhite
+				evaluation += 1000 * potentialMillsBlack
 			else:
-				evaluation += 1000 * possible_mills2
-				evaluation += 500 * potential_mills1
-			evaluation -= 10 * moves1
+				evaluation += 1000 * numPossibleMillsWhite
+				evaluation += 500 * potentialMillsBlack
+			evaluation -= 10 * movablePiecesBlack
 	else:
-		evaluation = 100 * pieces2 - pieces1
-		if pieces2 < 4:
-			evaluation += 500 * possible_mills2
-			evaluation += 1000 * potential_mills1
+		evaluation = 100 * (numWhitePieces - numBlackPieces)
+		if numWhitePieces < 4:
+			evaluation += 500 * numPossibleMillsWhite
+			evaluation += 1000 * potentialMillsBlack
 		else:
-			evaluation += 1000 * possible_mills2
-			evaluation += 500 * potential_mills1
-		evaluation -= 10 * moves1
+			evaluation += 1000 * numPossibleMillsWhite
+			evaluation += 500 * potentialMillsBlack
+		evaluation -= 10 * moveablePiecesBlack
 	return evaluation
