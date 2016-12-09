@@ -9,17 +9,17 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, opening):
 		possible_configs = None
 		current_eval = evaluator(board)
 
-		if not player1:
+		if player1:
 
-			if opening:
-				possible_configs = addPiecesStage1Player1(board)
-			else:
-				possible_configs = addPiecesStage23Player1(board)
-		else:
 			if opening:
 				possible_configs = addPiecesStage1(board)
 			else:
 				possible_configs = addPiecesStage23(board)
+		else:
+			if opening:
+				possible_configs = addPiecesStage1AI(board)
+			else:
+				possible_configs = addPiecesStage23AI(board)
 
 		for move in possible_configs:
 

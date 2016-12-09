@@ -114,7 +114,7 @@ def addPieces(board):
 		# fill empty positions with white
 		if (board[i] == "X"):
 			board_clone = copy.deepcopy(board)
-			board_clone[i] = "2"
+			board_clone[i] = "1"
 
 			if (hasMill(i, board_clone)):
 				board_list = removePiece(board_clone, board_list)
@@ -127,7 +127,7 @@ def removePiece(board_clone, board_list):
 	'''
 	'''
 	for i in range(len(board_clone)):
-		if (board_clone[i] == "1"):
+		if (board_clone[i] == "2"):
 
 			if not hasMill(i, board_clone):
 				new_board = copy.deepcopy(board_clone)
@@ -143,14 +143,14 @@ def addPiecesStage2(board):
 	'''
 	board_list = []
 	for i in range(len(board)):
-		if (board[i] == "2"):
+		if (board[i] == "1"):
 			adjacent_list = adjacentPositions(i)
 
 			for pos in adjacent_list:
 				if (board[pos] == "X"):
 					board_clone = copy.deepcopy(board)
 					board_clone[i] = "X"
-					board_clone[pos] = "2"
+					board_clone[pos] = "1"
 
 					if isMill(pos, board_clone):
 						board_list = removePiece(board_clone, board_list)
@@ -165,14 +165,14 @@ def addPiecesStage3(board):
 	board_list = []
 
 	for i in range(len(board)):
-		if (board[i] == "2"):
+		if (board[i] == "1"):
 
 			for j in range(len(board)):
 				if (board[j] == "X"):
 					board_clone = copy.deepcopy(board)
 
 					board_clone[i] = "X"
-					board_clone[j] = "2"
+					board_clone[j] = "1"
 
 					if (isMill(j, board_clone)):
 						board_list = removePiece(board_clone, board_list)
@@ -187,7 +187,7 @@ def addPiecesStage1(board):
 	return addPieces(board)
 
 
-def addPiecesStage1Player1(board):
+def addPiecesStage1AI(board):
 	'''
 	'''
 	inv_board = InvertedBoard(board)
@@ -199,13 +199,13 @@ def addPiecesStage1Player1(board):
 
 
 def addPiecesStage23(board):
-	if (getNumPieces(board, "2") == _END_GAME_PIECES):
+	if (getNumPieces(board, "1") == _END_GAME_PIECES):
 		return addPiecesStage3(board)
 	else:
-		addPiecesStage2(board)
+		return addPiecesStage2(board)
 
 
-def addPiecesStage23Player1(board):
+def addPiecesStage23AI(board):
 	'''
 	'''
 	inv_Board = board.InvertedBoard()
@@ -240,34 +240,35 @@ def getEvaluationStage1(board):
 	'''
 	'''
 
-	pieces1 = getNumPieces(board, "1")
-	pieces2 = getNumPieces(board, "1")
-	mills = getPossibleMills(board, "2")
+	numWhitePieces = getNumPieces(board, "1")
+	numBlackPieces = getNumPieces(board, "2")
+	mills = getPossibleMills(board, "1")
 
-	return pieces2 - pieces1 + mills
+	return numWhitePieces - numBlackPieces + mills
 
 
 def getEvaluationStage23(board):
 	'''
 	'''
-	pieces1 = getNumPieces(board, "1")
-	pieces2 = getNumPieces(board, "1")
-	mills = getPossibleMills(board, "2")
+	
+	numWhitePieces = getNumPieces(board, "1")
+	numBlackPieces = getNumPieces(board, "2")
+	mills = getPossibleMills(board, "1")
 
 	evaluation = 0
 
 	board_list = addPiecesStage23(board)
 
-	moves1 = len(board_list)
+	numBlackMoves = len(board_list)
 
-	if (pieces1 <= 2):
+	if (numBlackPieces <= 2):
 		evaluation = 10000
-	elif moves1 == 0:
+	elif numBlackPieces == 0:
 		evaluation = 10000
-	elif pieces2 <= 2:
+	elif numWhitePieces <= 2:
 		evaluation = -10000
 	else:
-		evaluation = (1000 * (pieces2 + mills - pieces1) - moves1)
+		evaluation = (1000 * (numWhitePieces + mills - numBlackPieces) - numBlackMoves)
 	return evaluation
 
 
@@ -277,8 +278,7 @@ def potentialMill(position, board, player):
 	adjacent_list = adjacentPositions(position)
 
 	for i in adjacent_list:
-		if (board[i] == player) \
-			and (not checkMill(position, board, player)):
+		if (board[i] == player) and (not checkMill(position, board, player)):
 			return True
 	return False
 
@@ -292,15 +292,15 @@ def getPiecesInPotentialMill(board, player):
 		if (board[i] == player):
 			adjacent_list = adjacentPositions(i)
 			for pos in adjacent_list:
-				if (player == "2"):
-					if (board[pos] == "1"):
-						board[i] = "1"
+				if (player == "1"):
+					if (board[pos] == "2"):
+						board[i] = "2"
 						if hasMill(i, board):
 							count += 1
 						board[i] = player
 				else:
-					if (board[pos] == "2" \
-						and potentialMill(pos, board, "2")):
+					if (board[pos] == "1" \
+						and potentialMill(pos, board, "1")):
 						count += 1
 	return count
 

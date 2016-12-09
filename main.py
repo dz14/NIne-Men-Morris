@@ -39,7 +39,6 @@ if __name__ == "__main__":
 		board.append("X")
 
 	evaluation = evaluator(board)
-
 		
 	for i in range(9):
 
