@@ -42,7 +42,7 @@ def AI_VS_AI(heuristic1, heuristic2):
 	for i in range(9):
 
 		boardOutput(board)
-		evalBoard = minimax(board, ai_depth, True, alpha, beta, True, heuristic1)
+		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, True, heuristic1)
 
 		if evalBoard.evaluator == float('inf'):
 			print("AI Bot 1 has won!")
@@ -63,7 +63,7 @@ def AI_VS_AI(heuristic1, heuristic2):
 	while True:
 
 		boardOutput(board)
-		evalBoard = minimax(board, ai_depth, True, alpha, beta, False, heuristic1)
+		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, False, heuristic1)
 
 		if evalBoard.evaluator == float('inf'):
 			print("AI Bot 1 has won!")
