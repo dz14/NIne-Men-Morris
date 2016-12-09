@@ -13,14 +13,14 @@ def alphaBetaPruning(board, depth, isWhite, alpha, beta, isOpeningPhase):
 			if isOpeningPhase:
 				possible_configs = addPiecesForOpeningMoves(board)
 			else:
-				possible_configs = addPiecesForMidgameAndEndGame(board)
+				possible_configs = addPiecesforMidgameAndEndGame(board)
 		
 		else:
 			
 			if isOpeningPhase:
 				possible_configs = addPiecesForOpeningMovesBlack(board)
 			else:
-				possible_configs = addPiecesForMidgameAndEndgameBlack(board)
+				possible_configs = addPiecesforMidgameAndEndGameBlack(board)
 
 		for move in possible_configs:
 

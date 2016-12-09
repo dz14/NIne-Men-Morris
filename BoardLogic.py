@@ -167,7 +167,7 @@ def addPiecesForHopping(board):
 					board_clone[i] = "X"
 					board_clone[j] = "1"
 
-					if (isMill(j, board_clone)):
+					if (isCloseMill(j, board_clone)):
 						board_list = removePiece(board_clone, board_list)
 					else:
 						board_list.append(board_clone)
@@ -189,6 +189,11 @@ def addPiecesforMidgameAndEndGame(board):
 		return addPiecesForHopping(board)
 	else:
 		return addPiecesForMidgame(board)
+
+def addPiecesforMidgameAndEndGameBlack(board):
+	inverted = InvertedBoard(board)
+
+	return generateInvertedBoardList(addPiecesforMidgameAndEndGame(inverted))
 
 def addPiecesStage23AI(board):
 	'''
@@ -296,7 +301,7 @@ def getEvaluationImproved(board, isStage1):
 	moveablePiecesBlack = 0
 
 	if (not isStage1):
-		board_list1 = addPiecesforMidgameAndEndgameBlack(board)
+		board_list1 = addPiecesforMidgameAndEndGameBlack(board)
 
 		movablePiecesBlack = len(board_list1)
 

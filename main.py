@@ -64,7 +64,7 @@ if __name__ == "__main__":
 		printBoard(board)
 		movePiece(board)
 
-		if getEvaluationForMidGameAndEndGame(board) == 100000:
+		if getEvaluationStage23(board) == 100000:
 			print("You Win!")
 			exit(0)
 

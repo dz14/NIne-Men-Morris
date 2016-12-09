@@ -36,7 +36,7 @@ def movePiece(board):
 
 					print("\nWhite moved")
 
-					if isCloseMill(pos, board):
+					if isCloseMill(newPos, board):
 						removePiece(board)
 
 					return True
