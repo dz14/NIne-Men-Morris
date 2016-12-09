@@ -3,16 +3,16 @@ from Utility import *
 
 class evaluator():
  	
- 	def __init__(self, board):
+ 	def __init__(self):
  		self.evaluator = 0
- 		self.board = board
+ 		self.board = []
 
 
-def alphaBetaPruning(board, depth, player1, alpha, beta, isStage1):
-	finalEvaluation = evaluator(board)
+def alphaBetaPruning(board, depth, player1, alpha, beta, isStage1, heuristic):
+	finalEvaluation = evaluator()
 
 	if depth != 0:
-		currentEvaluation = evaluator(board)
+		currentEvaluation = evaluator()
 
 		if player1:
 
@@ -32,14 +32,14 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, isStage1):
 
 			if player1:
 
-				currentEvaluation = alphaBetaPruning(move, depth - 1, False, alpha, beta, isStage1)
+				currentEvaluation = alphaBetaPruning(move, depth - 1, False, alpha, beta, isStage1, heuristic)
 
 				if currentEvaluation.evaluator > alpha:
 					alpha = currentEvaluation.evaluator
 					finalEvaluation.board = move
 			else:
 
-				currentEvaluation = alphaBetaPruning(move, depth - 1, True, alpha, beta, isStage1)
+				currentEvaluation = alphaBetaPruning(move, depth - 1, True, alpha, beta, isStage1, heuristic)
 				
 				if currentEvaluation.evaluator < beta:
 					beta = currentEvaluation.evaluator
@@ -56,8 +56,8 @@ def alphaBetaPruning(board, depth, player1, alpha, beta, isStage1):
 	else:
 
 		if player1:
-			finalEvaluation.evaluator = getEvaluationImproved(board, isStage1)
+			finalEvaluation.evaluator = heuristic(board, isStage1)
 		else:
-			finalEvaluation.evaluator = getEvaluationImproved(InvertedBoard(board), isStage1)
+			finalEvaluation.evaluator = heuristic(InvertedBoard(board), isStage1)
 
 	return finalEvaluation
