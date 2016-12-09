@@ -1,10 +1,11 @@
 from AlphaBeta import *
 from BoardLogic import *
+from heuristics import *
 
 alpha = float('-inf')
 beta = float('inf')
 depth = 3
-ai_depth = 5
+ai_depth = 4
 
 def printBoard(board):
 		
@@ -28,29 +29,29 @@ def printBoard(board):
 		print(board[5]+"(05)----------------------"+board[6]+"(06)----------------------"+board[7]+"(07)");
 	
 
-def AI_VS_AI():
+def AI_VS_AI(heuristic1, heuristic2):
 
 	board = []
 	for i in range(24):
 		board.append("X")
 
-	evaluation = evaluator(board)
+	evaluation = evaluator()
 		
 	for i in range(9):
 
 		printBoard(board)
-		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, True)
+		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, True, heuristic1)
 
-		if evalBoard.evaluator == 100000:
+		if evalBoard.evaluator == float('inf'):
 			print("AI Bot 1 has won!")
 			exit(0)
 		else:
 			board = evalBoard.board
 		
 		printBoard(board)
-		evalBoard = alphaBetaPruning(board, ai_depth, False, alpha, beta, True)
+		evalBoard = alphaBetaPruning(board, ai_depth, False, alpha, beta, True, heuristic2)
 		
-		if evalBoard.evaluator == -100000:
+		if evalBoard.evaluator == float('-inf'):
 			print("AI Bot 2 has won!")
 			exit(0)
 		else:
@@ -59,30 +60,31 @@ def AI_VS_AI():
 	while True:
 
 		printBoard(board)
-		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, False)
+		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, False, heuristic1)
 
-		if evalBoard.evaluator == 100000:
+		if evalBoard.evaluator == float('inf'):
 			print("AI Bot 1 has won!")
 			exit(0)
 		else:
 			board = evalBoard.board
 
 		printBoard(board)
-		evaluation = alphaBetaPruning(board, ai_depth, False, alpha, beta, False)
+		evaluation = alphaBetaPruning(board, ai_depth, False, alpha, beta, False, heuristic2)
 
-		if evaluation.evaluator == -100000:
+		if evaluation.evaluator == float('-inf'):
 			print("You Lost")
 			exit(0)
 		else:
 			board = evaluation.board
 
 
-def HUMAN_VS_AI():
+def HUMAN_VS_AI(heuristic_stage1, heuristic_stage23):
+	
 	board = []
 	for i in range(24):
 		board.append("X")
 
-	evaluation = evaluator(board)
+	evaluation = evaluator()
 		
 	for i in range(9):
 
@@ -113,7 +115,7 @@ def HUMAN_VS_AI():
 								print("Input was either out of bounds or wasn't an integer")
 
 					finished = True
-					
+
 				else:
 					print("There is already a piece there")
 
@@ -121,14 +123,14 @@ def HUMAN_VS_AI():
 				print("Error getting the value")
 
 
-		if getEvaluationForOpeningPhase(board) == 100000:
+		if getEvaluationForOpeningPhase(board) == float('inf'):
 			print("Winner!")
 			exit(0)
 		
 		printBoard(board)
-		evalBoard = alphaBetaPruning(board, depth, False, alpha, beta, True)
+		evalBoard = alphaBetaPruning(board, depth, False, alpha, beta, True, heuristic_stage1)
 
-		if evalBoard.evaluator == -100000:
+		if evalBoard.evaluator == float('-inf'):
 			print("You Lost")
 			exit(0)
 		else:
@@ -185,15 +187,15 @@ def HUMAN_VS_AI():
 			except Exception:
 				print("You cannot move there")
 
-		if getEvaluationStage23(board) == 100000:
+		if getEvaluationStage23(board) == float('inf'):
 			print("You Win!")
 			exit(0)
 
 		printBoard(board)
 
-		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, False)
+		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, False, heuristic_stage23)
 
-		if evaluation.evaluator == -100000:
+		if evaluation.evaluator == float('-inf'):
 			print("You Lost")
 			exit(0)
 		else:
@@ -210,9 +212,9 @@ if __name__ == "__main__":
 		gametype = input("Please enter 1 or 2")
 
 	if gametype == "1":
-		HUMAN_VS_AI()
+		HUMAN_VS_AI(potentialMillsHeuristic, AdvancedHeuristic)
 	elif gametype == "2":
-		AI_VS_AI()
+		AI_VS_AI(potentialMillsHeuristic, numberOfPiecesHeuristic)
 
 	
 
