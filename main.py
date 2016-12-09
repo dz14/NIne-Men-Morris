@@ -43,15 +43,14 @@ if __name__ == "__main__":
 	for i in range(9):
 
 		printBoard(board)
-		b = placePiece(board)
-		board = b[0]
+		placePiece(board)
 
-		if getEvaluationStage1(board) == 100000:
+		if getEvaluationForOpeningStage(board) == 100000:
 			print("Winner!")
 			exit(0)
 		
 		printBoard(board)
-		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
+		evalBoard = alphaBetaPruning(board, depth, False, alpha, beta, True)
 
 		if evaluation.evaluator == -100000:
 			print("You Lost")
@@ -64,13 +63,13 @@ if __name__ == "__main__":
 		printBoard(board)
 		movePiece(board)
 
-		if getEvaluationStage23(board) == 100000:
+		if getEvaluationForMidGameAndEndGame(board) == 100000:
 			print("You Win!")
 			exit(0)
 
 		printBoard(board)
 
-		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, True)
+		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, False)
 
 		if evaluation.evaluator == -100000:
 			print("You Lost")

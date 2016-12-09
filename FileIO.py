@@ -2,19 +2,16 @@ from BoardLogic import *
 from MorrisState import *
 
 def placePiece(board):
-	notFound = True
-	removePieces = False
-	while notFound:
+	while True:
 		try:
 
 			pos = int(input("\nWhere do you want to place the WHITE piece?"))	
+			
 			if board[pos] == "X":
 				board[pos] = '1'
-				if hasMill(pos, board):
+				if isCloseMill(pos, board):
 					board = removePiece(board)
-					removePieces = True
-				notFound = False
-				return (board, removePieces)
+				return True
 			else:
 				print("There is already a piece there")
 
@@ -39,7 +36,7 @@ def movePiece(board):
 
 					print("\nWhite moved")
 
-					if hasMill(pos, board):
+					if isCloseMill(pos, board):
 						removePiece(board)
 
 					return True
@@ -52,14 +49,14 @@ def movePiece(board):
 			print("You cannot move there")
 
 def removePiece(board):
-	notFound = True
-	while notFound:
+	while True:
 		try:
+
 			pos = int(input("\nWhich black piece do you want to remove?"))
-			if board[pos] == "2" and not hasMill(pos, board) or (hasMill(pos, board) and getNumPieces(board, "1") == 3):
+			
+			if board[pos] == "2" and not isCloseMill(pos, board) or (isCloseMill(pos, board) and getNumberOfPieces(board, "1") == 3):
 				board[pos] = "X"
-				notFound = False
-				return board
+				return True
 			else:
 				print("Invalid position")
 				continue
