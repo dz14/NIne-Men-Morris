@@ -1,43 +1,45 @@
-from Evaluator import *
 from BoardLogic import *
-from MorrisState import *
+from Utility import *
 
-def alphaBetaPruning(board, depth, isWhite, alpha, beta, isOpeningPhase):
+class evaluator():
+ 	
+ 	def __init__(self, board):
+ 		self.evaluator = 0
+ 		self.board = board
+
+
+def alphaBetaPruning(board, depth, player1, alpha, beta, isStage1):
 	finalEvaluation = evaluator(board)
 
 	if depth != 0:
 		currentEvaluation = evaluator(board)
 
-		if isWhite:
+		if player1:
 
-			if isOpeningPhase:
+			if isStage1:
 				possible_configs = addPiecesForOpeningMoves(board)
 			else:
 				possible_configs = addPiecesforMidgameAndEndGame(board)
 		
 		else:
 			
-			if isOpeningPhase:
+			if isStage1:
 				possible_configs = addPiecesForOpeningMovesBlack(board)
 			else:
 				possible_configs = addPiecesforMidgameAndEndGameBlack(board)
 
 		for move in possible_configs:
 
-			if isWhite:
+			if player1:
 
-				currentEvaluation = alphaBetaPruning(move, depth - 1, False, alpha, beta, isOpeningPhase)
-
-				finalEvaluation.positions = finalEvaluation.positions + currentEvaluation.positions
+				currentEvaluation = alphaBetaPruning(move, depth - 1, False, alpha, beta, isStage1)
 
 				if currentEvaluation.evaluator > alpha:
 					alpha = currentEvaluation.evaluator
 					finalEvaluation.board = move
 			else:
 
-				currentEvaluation = alphaBetaPruning(move, depth - 1, True, alpha, beta, isOpeningPhase)
-
-				finalEvaluation.positions = finalEvaluation.positions + currentEvaluation.positions
+				currentEvaluation = alphaBetaPruning(move, depth - 1, True, alpha, beta, isStage1)
 				
 				if currentEvaluation.evaluator < beta:
 					beta = currentEvaluation.evaluator
@@ -46,23 +48,16 @@ def alphaBetaPruning(board, depth, isWhite, alpha, beta, isOpeningPhase):
 			if alpha >= beta:
 				break
 
-		if isWhite:
+		if player1:
 			finalEvaluation.evaluator = alpha
 		else:
 			finalEvaluation.evaluator = beta
 
 	else:
 
-		if isWhite:
-			finalEvaluation.evaluator = getEvaluationImproved(board, isOpeningPhase)
+		if player1:
+			finalEvaluation.evaluator = getEvaluationImproved(board, isStage1)
 		else:
-			finalEvaluation.evaluator = getEvaluationImproved(InvertedBoard(board), isOpeningPhase)
-
-		finalEvaluation.positions = finalEvaluation.positions + 1
-
-
+			finalEvaluation.evaluator = getEvaluationImproved(InvertedBoard(board), isStage1)
 
 	return finalEvaluation
-
-						
-

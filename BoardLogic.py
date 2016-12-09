@@ -1,4 +1,4 @@
-from MorrisState import *
+from Utility import *
 import copy
 
 _END_GAME_PIECES = 3

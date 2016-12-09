@@ -1,11 +1,10 @@
-from Evaluator import *
-from FileIO import *
 from AlphaBeta import *
 from BoardLogic import *
 
 alpha = float('-inf')
 beta = float('inf')
 depth = 3
+ai_depth = 5
 
 def printBoard(board):
 		
@@ -29,10 +28,7 @@ def printBoard(board):
 		print(board[5]+"(05)----------------------"+board[6]+"(06)----------------------"+board[7]+"(07)");
 	
 
-
-
-if __name__ == "__main__":
-	
+def AI_VS_AI():
 
 	board = []
 	for i in range(24):
@@ -40,21 +36,22 @@ if __name__ == "__main__":
 
 	evaluation = evaluator(board)
 		
-	
 	for i in range(9):
 
 		printBoard(board)
-		placePiece(board)
+		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, True)
 
-		if getEvaluationForOpeningPhase(board) == 100000:
-			print("Winner!")
+		if evalBoard.evaluator == 100000:
+			print("AI Bot 1 has won!")
 			exit(0)
+		else:
+			board = evalBoard.board
 		
 		printBoard(board)
-		evalBoard = alphaBetaPruning(board, depth, False, alpha, beta, True)
-		print(evalBoard.board)
+		evalBoard = alphaBetaPruning(board, ai_depth, False, alpha, beta, True)
+		
 		if evalBoard.evaluator == -100000:
-			print("You Lost")
+			print("AI Bot 2 has won!")
 			exit(0)
 		else:
 			board = evalBoard.board
@@ -62,7 +59,131 @@ if __name__ == "__main__":
 	while True:
 
 		printBoard(board)
-		movePiece(board)
+		evalBoard = alphaBetaPruning(board, ai_depth, True, alpha, beta, False)
+
+		if evalBoard.evaluator == 100000:
+			print("AI Bot 1 has won!")
+			exit(0)
+		else:
+			board = evalBoard.board
+
+		printBoard(board)
+		evaluation = alphaBetaPruning(board, ai_depth, False, alpha, beta, False)
+
+		if evaluation.evaluator == -100000:
+			print("You Lost")
+			exit(0)
+		else:
+			board = evaluation.board
+
+
+def HUMAN_VS_AI():
+	board = []
+	for i in range(24):
+		board.append("X")
+
+	evaluation = evaluator(board)
+		
+	for i in range(9):
+
+		printBoard(board)
+		finished = False
+		while not finished:
+			try:
+
+				pos = int(input("\nWhere do you want to place the WHITE piece?"))	
+				
+				if board[pos] == "X":
+					
+					board[pos] = '1'
+					if isCloseMill(pos, board):
+						itemPlaced = False
+						while not itemPlaced:
+							try:
+
+								pos = int(input("\nWhich black piece do you want to remove?"))
+								
+								if board[pos] == "2" and not isCloseMill(pos, board) or (isCloseMill(pos, board) and getNumberOfPieces(board, "1") == 3):
+									board[pos] = "X"
+									itemPlaced = True
+								else:
+									print("Invalid position")
+									
+							except Exception:
+								print("Input was either out of bounds or wasn't an integer")
+
+					finished = True
+					
+				else:
+					print("There is already a piece there")
+
+			except Exception:
+				print("Error getting the value")
+
+
+		if getEvaluationForOpeningPhase(board) == 100000:
+			print("Winner!")
+			exit(0)
+		
+		printBoard(board)
+		evalBoard = alphaBetaPruning(board, depth, False, alpha, beta, True)
+
+		if evalBoard.evaluator == -100000:
+			print("You Lost")
+			exit(0)
+		else:
+			board = evalBoard.board
+
+	endStagesFinished = False
+	while not endStagesFinished:
+
+		printBoard(board)
+		
+		#Get the users next move
+		userHasMoved = False
+		while not usersHasMoved:
+			try:
+				pos = int(input("\nWhich WHITE piece do you want to move?: "))
+
+				while board[pos] != '1':
+					pos = int(input("\nWhich WHITE piece do you want to move?: ")) 
+
+				userHasPlaced = False
+				while not userHasPlaced:
+
+					newPos = int(input("Where do you want to place the white piece?"))
+
+					if board[newPos] == "X":
+						board[pos] = 'X'
+						board[newPos] = '1'
+
+						print("\nWhite moved")
+
+						if isCloseMill(newPos, board):
+							
+							userHasRemoved = False
+							while not userHasRemoved:
+								try:
+
+									pos = int(input("\nWhich black piece do you want to remove?"))
+									
+									if board[pos] == "2" and not isCloseMill(pos, board) or (isCloseMill(pos, board) and getNumberOfPieces(board, "1") == 3):
+										board[pos] = "X"
+										userHasRemoved = True
+									else:
+										print("Invalid position")
+										continue
+								except Exception:
+									print("Error while accepting input")
+
+						userHasPlaced = True
+						userHasMoved = True
+
+					else:
+						print("You cannot move there")
+
+			except Exception:
+				print("You cannot move there")
 
 		if getEvaluationStage23(board) == 100000:
 			print("You Win!")
@@ -77,6 +198,23 @@ if __name__ == "__main__":
 			exit(0)
 		else:
 			board = evaluation.board
+
+
+if __name__ == "__main__":
+	
+	print("Welcome to Nine Mens Morris")
+	print("==========================")
+	gametype = input("Please enter 1 or 2: ")
+
+	while gametype != "1" and gametype != "2":
+		gametype = input("Please enter 1 or 2")
+
+	if gametype == "1":
+		HUMAN_VS_AI()
+	elif gametype == "2":
+		AI_VS_AI()
+
+	
 
 
 
