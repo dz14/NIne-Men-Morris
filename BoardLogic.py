@@ -7,30 +7,30 @@ def adjacentLocations(position):
 	@param position: index of the piece
 	'''
 	adjacent = [
-		[1, 3],
-		[0, 2, 9],
-		[1, 4],
-		[0, 5, 11],
-		[2, 7, 12],
-		[3, 6],
-		[5, 7, 14],
-		[4, 6],
-		[9, 11],
-		[1, 8, 10, 17],
-		[9, 12],
-		[3, 8, 13, 19],
-		[4, 10, 15, 20],
-		[11, 14],
-		[6, 13, 15, 22],
-		[12, 14],
-		[17, 19],
-		[9, 16, 18],
-		[17, 20],
-		[11, 16, 21],
-		[12, 18, 23],
-		[19, 22],
-		[21, 23, 14],
-		[20, 22]
+		[1, 9],
+		[0, 2, 4],
+		[1, 14],
+		[4, 10],
+		[1, 7],
+		[4, 13],
+		[7, 11],
+		[4, 6, 8],
+		[7, 12],
+		[0, 10, 21],
+		[3, 9, 11, 18],
+		[6, 10, 15],
+		[8, 13, 17],
+		[5, 12, 14, 20],
+		[2, 13, 23],
+		[11, 16],
+		[15, 17, 19],
+		[12, 16],
+		[10, 19],
+		[16, 18, 20, 22],
+		[13, 19],
+		[9, 22],
+		[19, 21, 23],
+		[14, 22]
 	]
 	return adjacent[position]
 
@@ -43,30 +43,30 @@ def checkMillFormation(position, board, player):
 	'''
 
 	mill = [
-		(isMill(player, board, 1, 2) or isMill(player, board, 3, 5)),
-		(isMill(player, board, 0, 2) or isMill(player, board, 9, 17)),
-		(isMill(player, board, 0, 1) or isMill(player, board, 4, 7)),
-		(isMill(player, board, 0, 5) or isMill(player, board, 11, 19)),
-		(isMill(player, board, 2, 7) or isMill(player, board, 12, 20)),
-		(isMill(player, board, 0, 3) or isMill(player, board, 6, 7)),
-		(isMill(player, board, 5, 7) or isMill(player, board, 14, 22)),
-		(isMill(player, board, 2, 4) or isMill(player, board, 5, 6)),
-		(isMill(player, board, 9, 10) or isMill(player, board, 11, 13)),
-		(isMill(player, board, 8, 10) or isMill(player, board, 1, 17)),
-		(isMill(player, board, 8, 9) or isMill(player, board, 12, 15)),
-		(isMill(player, board, 3, 19) or isMill(player, board, 8, 13)),
-		(isMill(player, board, 20, 4) or isMill(player, board, 10, 15)),
-		(isMill(player, board, 8, 11) or isMill(player, board, 14, 15)),
-		(isMill(player, board, 13, 15) or isMill(player, board, 6, 22)),
-		(isMill(player, board, 13, 14) or isMill(player, board, 10, 12)),
-		(isMill(player, board, 17, 18) or isMill(player, board, 19, 21)),
-		(isMill(player, board, 1, 9) or isMill(player, board, 16, 18)),
-		(isMill(player, board, 16, 17) or isMill(player, board, 20, 23)),
-		(isMill(player, board, 16, 21) or isMill(player, board, 3, 11)),
-		(isMill(player, board, 12, 4) or isMill(player, board, 18, 23)),
-		(isMill(player, board, 16, 19) or isMill(player, board, 22, 23)),
-		(isMill(player, board, 6, 14) or isMill(player, board, 21, 23)),
-		(isMill(player, board, 18, 20) or isMill(player, board, 21, 22)),
+		(isMill(player, board, 1, 2) or isMill(player, board, 9, 21)),		#0
+		(isMill(player, board, 0, 2) or isMill(player, board, 4, 7)),		#1
+		(isMill(player, board, 0, 1) or isMill(player, board, 14, 23)),		#2
+		(isMill(player, board, 10, 18) or isMill(player, board, 4, 5)),		#3
+		(isMill(player, board, 3, 5) or isMill(player, board, 1, 7)),		#4
+		(isMill(player, board, 3, 4) or isMill(player, board, 13, 20)),		#5
+		(isMill(player, board, 7, 8) or isMill(player, board, 11, 15)),		#6
+		(isMill(player, board, 6, 8) or isMill(player, board, 1, 4)),		#7
+		(isMill(player, board, 6, 7) or isMill(player, board, 12, 17)),		#8
+		(isMill(player, board, 10, 11) or isMill(player, board, 0, 21)),	#9
+		(isMill(player, board, 9, 11) or isMill(player, board, 3, 18)),		#10
+		(isMill(player, board, 9, 10) or isMill(player, board, 6, 15)),		#11
+		(isMill(player, board, 13, 14) or isMill(player, board, 8, 17)),	#12
+		(isMill(player, board, 12, 14) or isMill(player, board, 5, 20)),	#13
+		(isMill(player, board, 12, 13) or isMill(player, board, 2, 23)),	#14
+		(isMill(player, board, 16, 17) or isMill(player, board, 6, 11)),	#15
+		(isMill(player, board, 15, 17) or isMill(player, board, 19, 22)),	#16
+		(isMill(player, board, 15, 16) or isMill(player, board, 8, 12)),	#17
+		(isMill(player, board, 19, 20) or isMill(player, board, 3, 10)),	#18
+		(isMill(player, board, 18, 20) or isMill(player, board, 16, 22)),	#19
+		(isMill(player, board, 18, 19) or isMill(player, board, 5, 13)),	#20
+		(isMill(player, board, 22, 23) or isMill(player, board, 0, 9)),		#21
+		(isMill(player, board, 21, 23) or isMill(player, board, 16, 19)),	#22
+		(isMill(player, board, 21, 22) or isMill(player, board, 2, 14))	,	#23
 	]
 
 	return mill[position]
@@ -96,7 +96,7 @@ def isCloseMill(position, board):
 	# if position is not empty
 	if (player != "X"):
 		return checkMillFormation(position, board, player)
-	
+
 	return False
 
 def stage1Moves(board):
@@ -191,7 +191,7 @@ def getPossibleMillCount(board, player):
 def getEvaluationStage23(board):
 	'''
 	'''
-	
+
 	numWhitePieces = numOfValue(board, "1")
 	numBlackPieces = numOfValue(board, "2")
 	mills = getPossibleMillCount(board, "1")
