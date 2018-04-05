@@ -35,41 +35,41 @@ def adjacentLocations(position):
 	return adjacent[position]
 
 def checkMillFormation(position, board, player):
-	'''
-	Return True if there's a mill at position for player on given board
-	@param position: the index of the position we're checking
-	@param board: the list of the current board
-	@param player: string representation of the board piece color
-	'''
+    """
+    Return True if there's a mill at position for player on given board
+    @param position: the index of the position we're checking
+    @param board: the list of the current board
+    @param player: string representation of the board piece color
+    """
 
-	mill = [
-		(isMill(player, board, 1, 2) or isMill(player, board, 9, 21)),		#0
-		(isMill(player, board, 0, 2) or isMill(player, board, 4, 7)),		#1
-		(isMill(player, board, 0, 1) or isMill(player, board, 14, 23)),		#2
-		(isMill(player, board, 10, 18) or isMill(player, board, 4, 5)),		#3
-		(isMill(player, board, 3, 5) or isMill(player, board, 1, 7)),		#4
-		(isMill(player, board, 3, 4) or isMill(player, board, 13, 20)),		#5
-		(isMill(player, board, 7, 8) or isMill(player, board, 11, 15)),		#6
-		(isMill(player, board, 6, 8) or isMill(player, board, 1, 4)),		#7
-		(isMill(player, board, 6, 7) or isMill(player, board, 12, 17)),		#8
-		(isMill(player, board, 10, 11) or isMill(player, board, 0, 21)),	#9
-		(isMill(player, board, 9, 11) or isMill(player, board, 3, 18)),		#10
-		(isMill(player, board, 9, 10) or isMill(player, board, 6, 15)),		#11
-		(isMill(player, board, 13, 14) or isMill(player, board, 8, 17)),	#12
-		(isMill(player, board, 12, 14) or isMill(player, board, 5, 20)),	#13
-		(isMill(player, board, 12, 13) or isMill(player, board, 2, 23)),	#14
-		(isMill(player, board, 16, 17) or isMill(player, board, 6, 11)),	#15
-		(isMill(player, board, 15, 17) or isMill(player, board, 19, 22)),	#16
-		(isMill(player, board, 15, 16) or isMill(player, board, 8, 12)),	#17
-		(isMill(player, board, 19, 20) or isMill(player, board, 3, 10)),	#18
-		(isMill(player, board, 18, 20) or isMill(player, board, 16, 22)),	#19
-		(isMill(player, board, 18, 19) or isMill(player, board, 5, 13)),	#20
-		(isMill(player, board, 22, 23) or isMill(player, board, 0, 9)),		#21
-		(isMill(player, board, 21, 23) or isMill(player, board, 16, 19)),	#22
-		(isMill(player, board, 21, 22) or isMill(player, board, 2, 14))	,	#23
-	]
+    idxs = [
+        [(1, 2), (9, 21)],
+        [(0, 2), (4, 7)],
+        [(0,1), (14, 23)],
+        [(10, 18), (4, 5)],
+        [(3, 5), (1, 7)],
+        [(3, 4), (13, 20)],
+        [(7, 8), (11, 15)],
+        [(6, 8), (1, 4)],
+        [(6, 7), (12, 17)],
+        [(10, 11), (0, 21)],
+        [(9 ,11), (3, 18)],
+        [(9, 10), (6, 15)],
+        [(13, 14), (8, 17)],
+        [(12, 14), (5, 20)],
+        [(12, 13), (2, 23)],
+        [(16, 17), (6, 11)],
+        [(15, 17), (19, 22)],
+        [(15, 16), (8, 12)],
+        [(19, 20), (3, 10)],
+        [(18, 20), (16, 22)],
+        [(18, 19), (5, 13)],
+        [(22, 23), (0, 9)],
+        [(21, 23), (16, 19)],
+        [(21, 22), (2, 14)],
+    ]
 
-	return mill[position]
+    return isMill(player, board, idxs[position][0][0], idxs[position][0][1]) or isMill(player, board, idxs[position][1][0], idxs[position][1][1])
 
 def isMill(player, board, pos1, pos2):
 	'''
