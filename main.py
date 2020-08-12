@@ -72,13 +72,13 @@ def AI_VS_AI(heuristic1, heuristic2):
 			board = evalBoard.board
 
 		boardOutput(board)
-		evaluation = alphaBetaPruning(board, ai_depth, False, alpha, beta, False, heuristic2)
+		evalBoard = alphaBetaPruning(board, ai_depth, False, alpha, beta, False, heuristic2)
 
-		if evaluation.evaluator == float('-inf'):
+		if evalBoard.evaluator == float('-inf'):
 			print("AI Bot 2 has won")
 			exit(0)
 		else:
-			board = evaluation.board
+			board = evalBoard.board
 
 
 def HUMAN_VS_AI(heuristic_stage1, heuristic_stage23):
@@ -188,13 +188,13 @@ def HUMAN_VS_AI(heuristic_stage1, heuristic_stage23):
 
 		boardOutput(board)
 
-		evaluation = alphaBetaPruning(board, depth, False, alpha, beta, False, heuristic_stage23)
+		evalBoard = alphaBetaPruning(board, depth, False, alpha, beta, False, heuristic_stage23)
 
-		if evaluation.evaluator == float('-inf'):
+		if evalBoard.evaluator == float('-inf'):
 			print("You Lost")
 			exit(0)
 		else:
-			board = evaluation.board
+			board = evalBoard.board
 
 
 if __name__ == "__main__":

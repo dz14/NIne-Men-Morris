@@ -21,3 +21,10 @@ def generateInvertedBoardList(pos_list):
     for i in pos_list:
         result.append(InvertedBoard(i))
     return result
+
+def getNumberOfPieces(board, player):
+    NumberOfPieces = 0
+    for i in range(24):
+        if board[i] == player:
+            NumberOfPieces += 1
+    return NumberOfPieces
